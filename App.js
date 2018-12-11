@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { createStore, applyMiddleware } from 'redux';
+import { applyMiddleware } from 'redux';
+import Reactotron from './src/tools/ReactotronConfig';
 import { Provider } from 'react-redux';
 import axios from 'axios';
 import axiosMiddleware from 'redux-axios-middleware';
@@ -16,12 +17,17 @@ import ShowGame from './src/components/ShowGame';
 import CompleteGame from './src/components/CompleteGame';
 import NewGame from './src/components/NewGame';
 
+if(__DEV__) {
+    import('./src/tools/ReactotronConfig')
+        .then(() => console.log('Reactotron Configured'))
+}
+
 const client = axios.create({
     baseURL: API_BASE_URL,
     responseType: 'json'
 });
 
-const store = createStore(reducer, applyMiddleware(axiosMiddleware(client)));
+const store = Reactotron.createStore(reducer, applyMiddleware(axiosMiddleware(client)));
 
 const AppNavigator = createStackNavigator({
     Home: HomeScreen,
