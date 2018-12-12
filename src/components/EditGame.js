@@ -13,6 +13,8 @@ import {createGame, clearNewGame} from '../reducers/gameReducer';
 import type {ITeam, TeamsType} from '../reducers/teamReducer';
 import type {PlayersType} from '../reducers/playerReducer';
 import { NavigationActions } from 'react-navigation';
+import VoiceToText from './VoiceToText';
+import TranscodeGame from '../helpers/TranscodeGame';
 
 type Props = {
     createGame: (game: ICreateGame) => Promise<Object>,
@@ -31,9 +33,14 @@ type Props = {
     navigation: any
 }
 
-type State = ICreateGame;
+type State = ICreateGame & {
+    speech: string,
+    listening: boolean
+};
 
 class EditGame extends Component<Props, State> {
+    _voiceToText: VoiceToText;
+
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -46,7 +53,9 @@ class EditGame extends Component<Props, State> {
                 defenderId: props.team2DefenderId || null,
                 attackerId: props.team2AttackerId || null,
                 score: 0,
-            }
+            },
+            speech: '',
+            listening: true
         };
     }
 
@@ -122,7 +131,10 @@ class EditGame extends Component<Props, State> {
     }
 
     saveGame = () => {
-        this.props.createGame(this.state);
+        this.props.createGame({
+            team1: this.state.team1,
+            team2: this.state.team2,
+        });
     };
 
     isValidGame = () => {
@@ -130,6 +142,28 @@ class EditGame extends Component<Props, State> {
         return team1.defenderId && team1.attackerId && team2.defenderId && team2.attackerId
             && (team1.score > team2.score || team2.score > team1.score)
             && [...new Set([team1.defenderId, team2.attackerId, team2.defenderId, team1.attackerId])].length === 4;
+    };
+
+    onSpeech = (results: string[]) => {
+        const speech = results.join(' ');
+        const game = (new TranscodeGame(speech, Array.from(this.props.players.values()))).transcode();
+
+        // If we have successfully transcoded the game we can stop listening
+        if (game.team2 && game.team2.score) {
+            this._voiceToText.stopListening();
+        }
+        this.setState({
+            speech,
+            ...game
+        });
+    };
+
+    onToggleListening = (listening: boolean) => {
+        this.setState({listening});
+    };
+
+    voiceToTextRef = (voiceToText: Component<VoiceToText>) => {
+        this._voiceToText = voiceToText;
     };
 
     renderTeam = (
@@ -190,6 +224,12 @@ class EditGame extends Component<Props, State> {
 
         return (
             <View style={styles.container}>
+                <VoiceToText
+                    ref={this.voiceToTextRef}
+                    onSpeech={this.onSpeech}
+                    onToggleListening={this.onToggleListening}
+                    style={styles.speechToText}
+                />
                 <Text style={styles.pageHeader}>New Game</Text>
                 {this.renderTeam(
                     team1,
@@ -276,6 +316,16 @@ const styles = StyleSheet.create({
     },
     homeButton: {
         // alignContent: 'right'
+    },
+    saveButton: {
+        flex: 0,
+        flexBasis: 50,
+        height: 50
+    },
+    speechToText: {
+        flex: 0,
+        flexBasis: 50,
+        height: 50
     }
 });
 

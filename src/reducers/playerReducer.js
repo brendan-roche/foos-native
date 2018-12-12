@@ -8,6 +8,7 @@ interface ICreatePlayer {
 interface ApiPlayer {
     id: number,
     name: string,
+    short_name: string,
     active: boolean,
     wins: number,
     losses: number,
@@ -21,8 +22,9 @@ export interface ApiBasicPlayer {
 }
 
 
-interface IPlayer extends ICreatePlayer {
+export interface IPlayer extends ICreatePlayer {
     id: number,
+    shortName: string,
     active: boolean,
     losses: number,
     trueskill: number,
@@ -99,6 +101,7 @@ function toPlayer(player: ApiPlayer): IPlayer {
     return {
         id: player.id,
         name: player.name,
+        shortName: player.short_name,
         active: player.active,
         wins: player.wins,
         losses: player.losses,

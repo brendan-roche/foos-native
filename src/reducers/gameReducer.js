@@ -5,7 +5,7 @@ import type {ApiBasicPlayer} from './playerReducer';
 export type CreateGameTeamType = {
     defenderId: ?number,
     attackerId: ?number,
-    score: number,
+    score: ?number,
 };
 
 export interface ICreateGame {
