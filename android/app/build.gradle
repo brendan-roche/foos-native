@@ -138,6 +138,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-blur')
     compile project(':react-native-gesture-handler')
     compile project(':react-native-voice')
     implementation fileTree(dir: "libs", include: ["*.jar"])

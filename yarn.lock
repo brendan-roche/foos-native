@@ -4775,6 +4775,13 @@ react-native-axios@^0.17.1:
   dependencies:
     follow-redirects "0.0.7"
 
+react-native-blur@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/react-native-blur/-/react-native-blur-3.2.2.tgz#5bfb50638d148982c9560436554ed01d77d6d07d"
+  integrity sha512-r7zNQISL7kQX5ocQEet5QVOBzoXP+Nr3dO7Wql+fV6rebx/8I7eAUHnfITDx12WoOmRpiJjbt/4xF5gTEll6Uw==
+  dependencies:
+    prop-types "^15.5.10"
+
 react-native-gesture-handler@^1.0.0, react-native-gesture-handler@^1.0.10:
   version "1.0.10"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.0.10.tgz#160e55e4886471931b7f7d52e22d94007540ab83"

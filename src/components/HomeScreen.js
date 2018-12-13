@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
-import { Button, View, Text } from 'react-native';
+import {View, findNodeHandle, Image, StyleSheet} from 'react-native';
+import {BlurView} from 'react-native-blur';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {getPlayers} from '../reducers/playerReducer';
 import {getTeams} from '../reducers/teamReducer';
 import {getGames} from '../reducers/gameReducer';
 import connect from 'react-redux/es/connect/connect';
-import type {GamesType} from "../reducers/gameReducer";
-import type {PlayersType} from "../reducers/playerReducer";
-import type {TeamsType} from "../reducers/teamReducer";
-import type {RootStore} from "../reducers";
+import type {RootStore} from '../reducers';
 
 type Props = {
     getPlayers: () => Object,
@@ -21,7 +20,14 @@ type Props = {
     navigation: any
 }
 
-class HomeScreen extends Component<Props> {
+type State = {
+    viewRef: BlurView | null
+}
+
+class HomeScreen extends Component<Props, State> {
+    backgroundImage: Image;
+
+    state = { viewRef: null };
 
     componentDidMount() {
         if (this.props.players.size === 0) {
@@ -35,23 +41,64 @@ class HomeScreen extends Component<Props> {
         }
     }
 
+    imageLoaded = () => {
+        this.setState({ viewRef: findNodeHandle(this.backgroundImage) });
+    };
+
     render() {
         return (
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <Text>Home Screen</Text>
-                <Button
-                    title="New Game"
-                    onPress={() => this.props.navigation.navigate('EditGame')}
+            <View style={styles.container}>
+                <Image
+                    ref={(img) => { this.backgroundImage = img; }}
+                    source={require('../../assets/images/foosball-1.jpg')}
+                    style={styles.backgroundImage}
+                    onLoadEnd={this.imageLoaded}
+                />
+                <BlurView
+                    style={styles.backgroundImage}
+                    viewRef={this.state.viewRef}
+                    blurType="light"
+                    blurAmount={5}
                 />
 
-                <Button
-                    title="List Players"
+                <Icon.Button
+                    name="plus"
+                    onPress={() => this.props.navigation.navigate('EditGame')}
+                    style={styles.button}
+                    marginBottom={10}
+                    backgroundColor='transparent'
+                >
+                    New Game
+                </Icon.Button>
+
+                <Icon.Button
+                    name="users"
                     onPress={() => this.props.navigation.navigate('Players')}
-                />
+                    style={styles.button}
+                >
+                    List Players
+                </Icon.Button>
             </View>
         );
     }
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    backgroundImage: {
+        position: "absolute",
+        width: '100%',
+        height: '100%',
+    },
+    button: {
+        backgroundColor: '#00BFFF',
+        paddingBottom: 10,
+    }
+});
 
 const mapStateToProps = (state: RootStore) => {
     return {
