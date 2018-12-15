@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {View, findNodeHandle, Image, StyleSheet} from 'react-native';
 import {BlurView} from 'react-native-blur';
+import Spinner from 'react-native-loading-spinner-overlay';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {getPlayers} from '../reducers/playerReducer';
 import {getTeams} from '../reducers/teamReducer';
@@ -46,8 +47,16 @@ class HomeScreen extends Component<Props, State> {
     };
 
     render() {
+        const { loading, navigation } = this.props;
+
         return (
             <View style={styles.container}>
+
+                { <Spinner
+                    visible={loading}
+                    textContent={'Loading...'}
+                    textStyle={styles.spinnerTextStyle}
+                /> }
                 <Image
                     ref={(img) => { this.backgroundImage = img; }}
                     source={require('../../assets/images/foosball-1.jpg')}
@@ -61,23 +70,24 @@ class HomeScreen extends Component<Props, State> {
                     blurAmount={5}
                 />
 
-                <Icon.Button
+                {!loading && <Icon.Button
                     name="plus"
-                    onPress={() => this.props.navigation.navigate('EditGame')}
+                    onPress={() => navigation.navigate('EditGame')}
                     style={styles.button}
                     marginBottom={10}
                     backgroundColor='transparent'
                 >
                     New Game
                 </Icon.Button>
-
-                <Icon.Button
+                }
+                {!loading && <Icon.Button
                     name="users"
                     onPress={() => this.props.navigation.navigate('Players')}
                     style={styles.button}
                 >
                     List Players
-                </Icon.Button>
+                </Icon.Button>}
+
             </View>
         );
     }
@@ -97,6 +107,9 @@ const styles = StyleSheet.create({
     button: {
         backgroundColor: '#00BFFF',
         paddingBottom: 10,
+    },
+    spinnerTextStyle: {
+        color: '#FFF'
     }
 });
 
