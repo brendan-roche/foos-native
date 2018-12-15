@@ -3,18 +3,14 @@ import React, {Component} from 'react';
 import {View, Text, FlatList, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 
-import {getPlayers} from '../reducers/playerReducer';
-import type {RootStore} from "../reducers";
+import type {RootStore} from '../reducers';
+import type {IPlayer} from '../reducers/playerReducer';
 
 type Props = {
-    getPlayers: () => Object
+    players: () => IPlayer[]
 }
 
 class ListPlayers extends Component<Props> {
-    componentDidMount() {
-        this.props.getPlayers();
-    }
-
     renderItem = ({item}) => (
         <View style={styles.item}>
             <Text>{item.name}</Text>
@@ -45,14 +41,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state: RootStore) => {
-    let storedPlayers = Object.values(state.players.players).map(player => ({key: String(player.id), ...player}));
     return {
-        players: storedPlayers
+        players: Array.from(state.players.players.values())
     };
 };
 
-const mapDispatchToProps = {
-    getPlayers
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ListPlayers);
+export default connect(mapStateToProps)(ListPlayers);
