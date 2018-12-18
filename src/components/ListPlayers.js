@@ -64,7 +64,6 @@ class ListPlayers extends Component<Props, State> {
 
     orderBy(column: string) {
         return () => {
-
             const {sortAsc, sortCol, dataProvider} = this.state;
             const ascending = column === sortCol
                 ? !sortAsc
@@ -81,13 +80,21 @@ class ListPlayers extends Component<Props, State> {
         }
     }
 
-    // Given type and data return the view component
+    showPlayer = (player: IPlayer) => {
+        return () => {
+            this.props.navigation.navigate(
+                'ShowPlayer',
+                {player}
+            );
+        }
+    };
+
     _rowRenderer = (type: number, player: IPlayer) => {
         return (
             <>
                 <TouchableOpacity
                     style={type === ViewTypes.EVEN ? styles.rowEven : styles.rowOdd}
-                    onPress={() => console.log('onPress')}
+                    onPress={this.showPlayer(player)}
                 >
                     <Text style={styles.nameCol}>{player.name}</Text>
                     <Text style={styles.winsCol}>{player.wins}</Text>

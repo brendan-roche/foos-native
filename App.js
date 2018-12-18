@@ -16,6 +16,7 @@ import EditGame from './src/components/EditGame';
 import ShowGame from './src/components/ShowGame';
 import CompleteGame from './src/components/CompleteGame';
 import NewGame from './src/components/NewGame';
+import NavShowPlayer from './src/components/NavShowPlayer';
 
 if(__DEV__) {
     import('./src/tools/ReactotronConfig')
@@ -35,6 +36,7 @@ const AppNavigator = createStackNavigator({
     EditGame: EditGame,
     NewGame: NewGame,
     ShowGame: ShowGame,
+    ShowPlayer: NavShowPlayer,
     CompleteGame: CompleteGame,
 }, {
     initialRouteName: 'Home',
