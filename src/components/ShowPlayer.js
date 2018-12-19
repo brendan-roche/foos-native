@@ -29,8 +29,16 @@ class ShowPlayer extends Component<Props> {
         );
     };
 
+    showGames = () => {
+        const { player, navigation } = this.props;
+        navigation.navigate(
+            'NavToGames',
+            {filter: (game: IGame) => isPartOfGame(player, game)}
+        );
+    };
+
     render() {
-        const {player, players, teams, games} = this.props;
+        const {player, games} = this.props;
 
         let donuts = 0;
         let winStreak = 0;
@@ -100,6 +108,12 @@ class ShowPlayer extends Component<Props> {
                         <Rows data={data} flexArr={[1]} style={styles.row} textStyle={styles.text}/>
                     </TableWrapper>
                 </Table>
+
+                <Button
+                    style={styles.button}
+                    title="Show Games"
+                    onPress={this.showGames}
+                />
 
                 <Button
                     style={styles.button}

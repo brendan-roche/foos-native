@@ -70,7 +70,7 @@ class ListGames extends Component<Props, State> {
     showGame = (game: IGame) => {
         return () => {
             this.props.navigation.navigate(
-                'ShowGame',
+                'NavToGame',
                 {game}
             );
         }

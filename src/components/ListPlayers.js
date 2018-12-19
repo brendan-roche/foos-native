@@ -87,7 +87,7 @@ class ListPlayers extends Component<Props, State> {
     showPlayer = (player: IPlayer) => {
         return () => {
             this.props.navigation.navigate(
-                'ShowPlayer',
+                'NavToPlayer',
                 {player}
             );
         }
