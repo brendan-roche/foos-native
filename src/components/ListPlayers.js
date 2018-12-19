@@ -1,6 +1,6 @@
 // @flow
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Dimensions, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, Dimensions, TouchableOpacity, RefreshControl} from 'react-native';
 import {connect} from 'react-redux';
 import {Big} from 'big.js';
 import { RecyclerListView, DataProvider, LayoutProvider } from 'recyclerlistview';
@@ -8,9 +8,11 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import type {RootStore} from '../reducers';
 import type {IPlayer} from '../reducers/playerReducer';
+import {getPlayers} from '../reducers/playerReducer';
 
 type Props = {
-    players: IPlayer[]
+    players: IPlayer[],
+    loading: boolean,
 }
 
 type State = {
@@ -30,6 +32,8 @@ type DimensionsType = {
 }
 
 class ListPlayers extends Component<Props, State> {
+    recyclerView: RecyclerListView;
+
     constructor(props: Props) {
         super(props);
 
@@ -106,6 +110,10 @@ class ListPlayers extends Component<Props, State> {
         );
     };
 
+    listViewRef = (ref: RecyclerListView) => {
+        this.recyclerView = ref
+    };
+
     render() {
         const {sortCol, sortAsc} = this.state;
         const icon = <Icon name={sortAsc ? 'arrow-down' : 'arrow-up'} size={10} />;
@@ -134,6 +142,15 @@ class ListPlayers extends Component<Props, State> {
                 >TrueSkill σ {sortCol === 'trueskillSigma' ? icon : null}</Text>
             </View>
             <RecyclerListView
+                ref={this.listViewRef}
+                canChangeSize
+                scrollViewProps={{
+                    refreshControl:
+                        <RefreshControl
+                            refreshing={this.props.loading}
+                            onRefresh={this.props.getPlayers}
+                        />
+                }}
                 layoutProvider={this._layoutProvider}
                 dataProvider={this.state.dataProvider}
                 rowRenderer={this._rowRenderer}
@@ -216,10 +233,16 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state: RootStore) => {
     return {
+        loading: state.players.loading,
         players: Array.from(
             state.players.players.values()
         ).filter((player: IPlayer) => player.active)
     };
 };
 
-export default connect(mapStateToProps)(ListPlayers);
+const mapDispatchToProps = {
+    getPlayers,
+};
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(ListPlayers);
