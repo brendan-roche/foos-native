@@ -14,10 +14,9 @@ import ListPlayers from './src/components/ListPlayers';
 import ListGames from './src/components/ListGames';
 import HomeScreen from './src/components/HomeScreen';
 import EditGame from './src/components/EditGame';
-import ShowGame from './src/components/ShowGame';
-import CompleteGame from './src/components/CompleteGame';
+import NavToGame from './src/components/NavToGame';
 import NewGame from './src/components/NewGame';
-import NavShowPlayer from './src/components/NavShowPlayer';
+import NavToPlayer from './src/components/NavToPlayer';
 
 if(__DEV__) {
     import('./src/tools/ReactotronConfig')
@@ -35,11 +34,10 @@ const AppNavigator = createStackNavigator({
     Home: HomeScreen,
     Players: ListPlayers,
     Games: ListGames,
-    EditGame: EditGame,
-    NewGame: NewGame,
-    ShowGame: ShowGame,
-    ShowPlayer: NavShowPlayer,
-    CompleteGame: CompleteGame,
+    EditGame,
+    NewGame,
+    ShowPlayer: NavToPlayer,
+    ShowGame: NavToGame,
 }, {
     initialRouteName: 'Home',
 });

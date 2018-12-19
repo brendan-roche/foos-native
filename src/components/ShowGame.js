@@ -75,7 +75,7 @@ class ShowGame extends Component<Props> {
         ));
         return (
             <View style={styles.container}>
-                <Text style={styles.pageHeader}>New Game</Text>
+                <Text style={styles.pageHeader}>Game {game.id}</Text>
 
                 <Table>
                     <Row

@@ -69,7 +69,7 @@ class EditGame extends Component<Props, State> {
         if (prevProps.newGame && !newGame) {
             navigation.reset([
                 NavigationActions.navigate({
-                    routeName: 'CompleteGame',
+                    routeName: 'NavToGame',
                     params: {game: prevProps.newGame}
                 })], 0
             );

@@ -7,7 +7,7 @@ type Props = {
     navigation: any,
 }
 
-export default function CompleteGame(props: Props) {
+export default function NavToGame(props: Props) {
     const { navigation } = props;
     const game: IGame = navigation.getParam('game');
     return (

@@ -7,7 +7,7 @@ type Props = {
     navigation: any,
 }
 
-export default function NavShowPlayer(props: Props) {
+export default function NavToPlayer(props: Props) {
     const { navigation } = props;
     const player: IPlayer = navigation.getParam('player');
     return (
