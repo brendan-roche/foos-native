@@ -8,9 +8,10 @@ import axiosMiddleware from 'redux-axios-middleware';
 import { createStackNavigator } from 'react-navigation';
 import { createAppContainer } from 'react-navigation';
 
+import { API_BASE_URL } from './src/constants/api';
 import reducer from './src/reducers/index';
 import ListPlayers from './src/components/ListPlayers';
-import { API_BASE_URL } from './src/constants/api';
+import ListGames from './src/components/ListGames';
 import HomeScreen from './src/components/HomeScreen';
 import EditGame from './src/components/EditGame';
 import ShowGame from './src/components/ShowGame';
@@ -33,6 +34,7 @@ const store = Reactotron.createStore(reducer, applyMiddleware(axiosMiddleware(cl
 const AppNavigator = createStackNavigator({
     Home: HomeScreen,
     Players: ListPlayers,
+    Games: ListGames,
     EditGame: EditGame,
     NewGame: NewGame,
     ShowGame: ShowGame,

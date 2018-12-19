@@ -80,13 +80,27 @@ class HomeScreen extends Component<Props, State> {
                     New Game
                 </Icon.Button>
                 }
+
                 {!loading && <Icon.Button
                     name="users"
                     onPress={() => this.props.navigation.navigate('Players')}
+                    marginBottom={10}
                     style={styles.button}
+                    backgroundColor='transparent'
                 >
-                    List Players
-                </Icon.Button>}
+                    Show Players
+                </Icon.Button>
+                }
+
+                {!loading && <Icon.Button
+                    name="soccer-ball-o"
+                    onPress={() => this.props.navigation.navigate('Games')}
+                    style={styles.button}
+                    backgroundColor='transparent'
+                >
+                    Show Games
+                </Icon.Button>
+                }
 
             </View>
         );
@@ -106,7 +120,6 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: '#00BFFF',
-        paddingBottom: 10,
     },
     spinnerTextStyle: {
         color: '#FFF'
