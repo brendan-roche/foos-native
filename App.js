@@ -18,6 +18,8 @@ import NavToGame from './src/components/NavToGame';
 import NewGame from './src/components/NewGame';
 import NavToPlayer from './src/components/NavToPlayer';
 import NavToGames from './src/components/NavToGames';
+import ListTeams from './src/components/ListTeams';
+import NavToTeams from './src/components/NavToTeams';
 
 if(__DEV__) {
     import('./src/tools/ReactotronConfig')
@@ -35,11 +37,13 @@ const AppNavigator = createStackNavigator({
     Home: HomeScreen,
     Players: ListPlayers,
     Games: ListGames,
+    Teams: ListTeams,
     EditGame,
     NewGame,
     NavToPlayer,
     NavToGame,
     NavToGames,
+    NavToTeams,
 }, {
     initialRouteName: 'Home',
 });

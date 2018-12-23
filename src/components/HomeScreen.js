@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {View, findNodeHandle, Image, StyleSheet} from 'react-native';
 import {BlurView} from 'react-native-blur';
 import Spinner from 'react-native-loading-spinner-overlay';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import {getPlayers} from '../reducers/playerReducer';
 import {getTeams} from '../reducers/teamReducer';
 import {getGames} from '../reducers/gameReducer';
@@ -70,7 +71,7 @@ class HomeScreen extends Component<Props, State> {
                     blurAmount={5}
                 />
 
-                {!loading && <Icon.Button
+                {!loading && <FontAwesome.Button
                     name="plus"
                     onPress={() => navigation.navigate('EditGame')}
                     style={styles.button}
@@ -78,10 +79,10 @@ class HomeScreen extends Component<Props, State> {
                     backgroundColor='transparent'
                 >
                     New Game
-                </Icon.Button>
+                </FontAwesome.Button>
                 }
 
-                {!loading && <Icon.Button
+                {!loading && <FontAwesome.Button
                     name="users"
                     onPress={() => this.props.navigation.navigate('Players')}
                     marginBottom={10}
@@ -89,17 +90,28 @@ class HomeScreen extends Component<Props, State> {
                     backgroundColor='transparent'
                 >
                     Show Players
-                </Icon.Button>
+                </FontAwesome.Button>
                 }
 
-                {!loading && <Icon.Button
+                {!loading && <FontAwesome.Button
                     name="soccer-ball-o"
                     onPress={() => this.props.navigation.navigate('Games')}
                     style={styles.button}
+                    marginBottom={10}
                     backgroundColor='transparent'
                 >
                     Show Games
-                </Icon.Button>
+                </FontAwesome.Button>
+                }
+
+                {!loading && <AntDesign.Button
+                    name="team"
+                    onPress={() => this.props.navigation.navigate('Teams')}
+                    style={styles.button}
+                    backgroundColor='transparent'
+                >
+                    Show Teams
+                </AntDesign.Button>
                 }
 
             </View>
