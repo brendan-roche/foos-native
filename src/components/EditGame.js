@@ -146,7 +146,7 @@ class EditGame extends Component<Props, State> {
 
     onSpeech = (results: string[]) => {
         const speech = results.join(' ');
-        const game = (new TranscodeGame(speech, Array.from(this.props.players.values()))).transcode();
+        const game = (new TranscodeGame(Array.from(this.props.players.values()))).transcode(speech);
 
         // If we have successfully transcoded the game we can stop listening
         if (game.team2 && game.team2.score) {
