@@ -107,6 +107,12 @@ android {
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
+        /**
+         * The follow two lines are required for setting up react-native-blur
+         * https://github.com/react-native-community/react-native-blur
+         */
+        renderscriptTargetApi 23
+        renderscriptSupportModeEnabled true
     }
     splits {
         abi {
@@ -138,9 +144,9 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-blur')
-    compile project(':react-native-gesture-handler')
-    compile project(':react-native-voice')
+    implementation project(':react-native-blur')
+    implementation project(':react-native-gesture-handler')
+    implementation project(':react-native-voice')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation "com.facebook.react:react-native:+"  // From node_modules

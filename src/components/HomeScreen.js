@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, findNodeHandle, Image, StyleSheet} from 'react-native';
+import {View, findNodeHandle, Image, StyleSheet, Text} from 'react-native';
 import {BlurView} from 'react-native-blur';
 import Spinner from 'react-native-loading-spinner-overlay';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -48,7 +48,12 @@ class HomeScreen extends Component<Props, State> {
     };
 
     render() {
-        const { loading, navigation } = this.props;
+        const { loading, error, navigation } = this.props;
+        const { viewRef } = this.state;
+
+        if (error) {
+            return <Text>{error}</Text>
+        }
 
         return (
             <View style={styles.container}>
@@ -64,12 +69,13 @@ class HomeScreen extends Component<Props, State> {
                     style={styles.backgroundImage}
                     onLoadEnd={this.imageLoaded}
                 />
-                <BlurView
+                {viewRef && <BlurView
                     style={styles.backgroundImage}
-                    viewRef={this.state.viewRef}
+                    viewRef={viewRef}
                     blurType="light"
                     blurAmount={5}
                 />
+                }
 
                 {!loading && <FontAwesome.Button
                     name="plus"

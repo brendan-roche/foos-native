@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
     },
     playerSelector: {
         height: 132,
-        width: 100,
+        width: 150,
     },
     playerSelectorItem: {
         height: 132,
