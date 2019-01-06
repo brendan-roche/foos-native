@@ -44,6 +44,7 @@ const AppNavigator = createStackNavigator({
     NavToGame,
     NavToGames,
     NavToTeams,
+    NavToTeam,
 }, {
     initialRouteName: 'Home',
 });
