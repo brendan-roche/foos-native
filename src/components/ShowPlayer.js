@@ -47,8 +47,8 @@ class ShowPlayer extends Component<Props> {
         let longestLosingStreak = 0;
         games.forEach((g: IGame) => {
             const isTeam1 = isPartOfGameTeam(player, g.team1);
-            const isWin = (g.team1.score > g.team2.score && isTeam1)
-                || (g.team2.score > g.team1.score && !isTeam1);
+            const isWin = g.team1.score != null && g.team2.score && ((g.team1.score > g.team2.score && isTeam1)
+                || (g.team2.score > g.team1.score && !isTeam1));
 
             if ((g.team1.score === 0 && isTeam1)
                 || (g.team2.score === 0 && !isTeam1)

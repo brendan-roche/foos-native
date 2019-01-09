@@ -46,8 +46,8 @@ class ShowTeam extends Component<Props> {
         let longestLosingStreak = 0;
         games.forEach((g: IGame) => {
             const isTeam1 = team.id === g.team1.id;
-            const isWin = (g.team1.score > g.team2.score && isTeam1)
-                || (g.team2.score > g.team1.score && !isTeam1);
+            const isWin = g.team1.score != null && g.team2.score != null && ((g.team1.score > g.team2.score && isTeam1)
+                || (g.team2.score > g.team1.score && !isTeam1));
 
             if ((g.team1.score === 0 && isTeam1)
                 || (g.team2.score === 0 && !isTeam1)
@@ -69,9 +69,13 @@ class ShowTeam extends Component<Props> {
                 }
             }
         });
+        const p1 = players.get(team.player1Id);
+        const p2 = players.get(team.player2Id);
+        const p1Name = (p1 && p1.name) || '';
+        const p2Name = (p2 && p2.name) || '';
         const data = [
-            [players.get(team.player1Id).name],
-            [players.get(team.player2Id).name],
+            [p1Name],
+            [p2Name],
             [Big(team.elo).toFixed(2)],
             [Big(team.trueskill).toFixed(2)],
             [Big(team.trueskillSigma).toFixed(2)],
@@ -84,7 +88,7 @@ class ShowTeam extends Component<Props> {
         ];
         return (
             <View style={styles.container}>
-                <Text style={styles.pageHeader}>{team.name}</Text>
+                <Text style={styles.pageHeader}>{p1Name + ' & ' + p2Name}</Text>
 
                 <Table>
                     <TableWrapper style={styles.wrapper}>

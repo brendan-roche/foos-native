@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "flow": "flow",
+    "flow-stop": "flow stop",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest"
   },
@@ -18,6 +20,7 @@
     "react-native-blur": "^3.2.2",
     "react-native-gesture-handler": "^1.0.12",
     "react-native-loading-spinner-overlay": "^1.0.1",
+    "react-native-screens": "^1.0.0-alpha.21",
     "react-native-table-component": "^1.2.0",
     "react-native-vector-icons": "^6.1.0",
     "react-native-voice": "^0.2.6",
@@ -28,7 +31,10 @@
     "redux-axios-middleware": "^4.0.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.2.2",
     "babel-jest": "23.6.0",
+    "babel-preset-flow": "^6.23.0",
+    "flow-bin": "0.78.0",
     "jest": "^23.6.0",
     "metro-react-native-babel-preset": "0.51.1",
     "react-test-renderer": "16.7.0",

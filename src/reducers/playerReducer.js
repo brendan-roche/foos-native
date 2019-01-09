@@ -1,11 +1,11 @@
 // @flow
 import {produce} from 'immer';
 
-interface ICreatePlayer {
+type ICreatePlayer = {
     name: string,
-}
+};
 
-interface ApiPlayer {
+type ApiPlayer = {
     id: number,
     name: string,
     short_name: string,
@@ -14,15 +14,15 @@ interface ApiPlayer {
     losses: number,
     trueskill: number,
     trueskill_sigma: number
-}
+};
 
-export interface ApiBasicPlayer {
+export type ApiBasicPlayer = {
     id: number,
     name: string,
-}
+};
 
 
-export interface IPlayer extends ICreatePlayer {
+export type IPlayer = ICreatePlayer & {
     id: number,
     shortName: string,
     active: boolean,
@@ -34,11 +34,11 @@ export interface IPlayer extends ICreatePlayer {
 
 export type PlayersType = Map<number, IPlayer>;
 
-export interface IPlayerStore {
+export type IPlayerStore = {
     players: PlayersType,
     loading: boolean,
     error: string
-}
+};
 
 export const GET_PLAYERS = 'players/LOAD';
 export const GET_PLAYERS_SUCCESS = 'players/LOAD_SUCCESS';
@@ -52,7 +52,7 @@ export const CREATE_PLAYER = 'player/CREATE';
 export const CREATE_PLAYER_SUCCESS = 'player/CREATE_SUCCESS';
 export const CREATE_PLAYER_FAIL = 'player/CREATE_FAIL';
 
-const playerReducer = produce((draft: IPlayerStore, action) => {
+const playerReducer = produce((draft: IPlayerStore, action: Object): IPlayerStore | void => {
     switch (action.type) {
         case GET_PLAYERS:
         case GET_PLAYER:
@@ -110,7 +110,7 @@ function toPlayer(player: ApiPlayer): IPlayer {
     };
 }
 
-export function getPlayers() {
+export function getPlayers(): Object {
     return {
         type: GET_PLAYERS,
         payload: {
@@ -121,7 +121,7 @@ export function getPlayers() {
     };
 }
 
-export function getPlayer(playerId) {
+export function getPlayer(playerId: number): Object {
     return {
         type: GET_PLAYER,
         payload: {
@@ -132,7 +132,7 @@ export function getPlayer(playerId) {
     };
 }
 
-export function createPlayer(player: ICreatePlayer) {
+export function createPlayer(player: ICreatePlayer): Object {
     return {
         type: CREATE_PLAYER,
         payload: {

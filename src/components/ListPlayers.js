@@ -13,6 +13,8 @@ import {getPlayers} from '../reducers/playerReducer';
 type Props = {
     players: IPlayer[],
     loading: boolean,
+    getPlayers: Function,
+    navigation: any,
 }
 
 type State = {
@@ -33,6 +35,7 @@ type DimensionsType = {
 
 class ListPlayers extends Component<Props, State> {
     recyclerView: RecyclerListView;
+    _layoutProvider: LayoutProvider;
 
     constructor(props: Props) {
         super(props);

@@ -8,10 +8,10 @@ export type CreateGameTeamType = {
     score: ?number,
 };
 
-export interface ICreateGame {
+export type ICreateGame = {
     team1: CreateGameTeamType,
     team2: CreateGameTeamType,
-}
+};
 
 export type GameTeamType = {
     id: number,
@@ -28,7 +28,7 @@ export type GameTeamType = {
     defenderTrueskillChange: number,
 } & CreateGameTeamType;
 
-export interface IGame {
+export type IGame = {
     id: number,
     team1: GameTeamType,
     team2: GameTeamType,
@@ -36,14 +36,14 @@ export interface IGame {
 
 export type GamesType = Map<number, IGame>;
 
-export interface IGameStore {
+export type IGameStore = {
     games: GamesType,
     loading: boolean,
     error: string,
     newGameId: number | null
-}
+};
 
-interface ApiGame {
+type ApiGame = {
     id: number,
     team1_id: number,
     team2_id: number,
@@ -86,7 +86,7 @@ export const CREATE_GAME_FAIL = 'game/CREATE_FAIL';
 
 export const CLEAR_NEW_GAME = 'game/CLEAR_NEW_GAME';
 
-const gameReducer = produce((draft: IGameStore, action: Object) => {
+const gameReducer = produce((draft: IGameStore, action: Object): IGameStore | void => {
     switch (action.type) {
         case GET_GAMES:
         case CREATE_GAME:
@@ -166,7 +166,7 @@ function toGame(game: ApiGame): IGame {
     };
 }
 
-export function getGames() {
+export function getGames(): Object {
     return {
         type: GET_GAMES,
         payload: {
@@ -177,7 +177,7 @@ export function getGames() {
     };
 }
 
-export function createGame(game: ICreateGame) {
+export function createGame(game: ICreateGame): Object {
     return {
         types: [CREATE_GAME, CREATE_GAME_SUCCESS, CREATE_GAME_FAIL],
         payload: {
@@ -197,7 +197,7 @@ export function createGame(game: ICreateGame) {
     };
 }
 
-export function clearNewGame() {
+export function clearNewGame(): Object {
     return {
         type: CLEAR_NEW_GAME
     }

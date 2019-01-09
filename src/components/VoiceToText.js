@@ -12,10 +12,19 @@ import {
 import Voice from 'react-native-voice';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+type VoiceEvent = {
+    error: string,
+    value: string[],
+};
+
+type VolumeVoiceEvent = {
+    value: string,
+} & VoiceEvent;
+
 type Props = {
     onError?: (error: string) => void,
     onToggleListening?: (listening: boolean) => void,
-    onSpeech: (text: String[]) => void,
+    onSpeech: (text: string[]) => void,
     onSpeechStart?: () => void,
     onSpeechEnd?: () => void,
     stopListening?: () => void,
@@ -84,43 +93,43 @@ export default class VoiceToText extends Component<Props, State> {
         Voice.destroy().then(Voice.removeAllListeners);
     }
 
-    onSpeechStart(e) {
+    onSpeechStart() {
         this.setState({
             started: true
         });
     }
 
-    onSpeechRecognized(e) {
+    onSpeechRecognized() {
         this.setState({
             recognized: true,
         });
     }
 
-    onSpeechEnd(e) {
+    onSpeechEnd() {
         this.setState({
             end: true,
         });
     }
 
-    onSpeechError(e) {
+    onSpeechError(e: VoiceEvent) {
         this.setState({
             error: JSON.stringify(e.error),
         });
     }
 
-    onSpeechResults(e) {
+    onSpeechResults(e: VoiceEvent) {
         this.setState({
             results: e.value,
         });
     }
 
-    onSpeechPartialResults(e) {
+    onSpeechPartialResults(e: VoiceEvent) {
         this.setState({
             partialResults: e.value,
         });
     }
 
-    onSpeechVolumeChanged(e) {
+    onSpeechVolumeChanged(e: VolumeVoiceEvent) {
         this.setState({
             pitch: e.value,
         });
@@ -158,7 +167,7 @@ export default class VoiceToText extends Component<Props, State> {
         }
     };
 
-    _cancelRecognizing = async (e) => {
+    _cancelRecognizing = async () => {
         try {
             await Voice.cancel();
             this.setState({
@@ -169,7 +178,7 @@ export default class VoiceToText extends Component<Props, State> {
         }
     };
 
-    _destroyRecognizer = async (e) => {
+    _destroyRecognizer = async () => {
         try {
             await Voice.destroy();
             this.setState({
@@ -209,7 +218,7 @@ export default class VoiceToText extends Component<Props, State> {
                     return (
                         <Text
                             key={`result-${index}`}
-                            style={styles.stat}>
+                        >
                             {result}
                         </Text>
                     )
@@ -226,4 +235,4 @@ const styles = StyleSheet.create({
     },
 });
 
-AppRegistry.registerComponent('VoiceToText', () => VoiceNative);
+AppRegistry.registerComponent('VoiceToText', () => VoiceToText);

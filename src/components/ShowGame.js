@@ -41,16 +41,16 @@ class ShowGame extends Component<Props> {
         const {game, players, teams} = this.props;
 
         const {team1, team2} = game;
-        const team1Defender = players.get(team1.defenderId).name;
-        const team1Attacker = players.get(team1.attackerId).name;
-        const team2Defender = players.get(team2.defenderId).name;
-        const team2Attacker = players.get(team2.attackerId).name;
+        const team1Defender = team1.defenderId && players.get(team1.defenderId);
+        const team1Attacker = team1.attackerId && players.get(team1.attackerId);
+        const team2Defender = team2.defenderId && players.get(team2.defenderId);
+        const team2Attacker = team2.attackerId && players.get(team2.attackerId);
         const recentGames = this.findHeadToHead();
         let team1Wins = 0;
         let team2Wins = 0;
         recentGames.forEach((g: IGame) => {
-            if ((this.isSameTeam(team1, g.team1) && g.team1.score > g.team2.score)
-                || (this.isSameTeam(team1, g.team2) && g.team2.score > g.team1.score)
+            if ((this.isSameTeam(team1, g.team1) && g.team1.score != null && g.team2.score != null && g.team1.score > g.team2.score)
+                || (this.isSameTeam(team1, g.team2) && g.team1.score != null && g.team2.score != null && g.team2.score > g.team1.score)
             ) {
                 team1Wins++;
             } else {
@@ -58,9 +58,11 @@ class ShowGame extends Component<Props> {
             }
         });
         const last5Games = recentGames.slice(recentGames.length - 6,recentGames.length - 1).reverse();
+        const t1 = teams.get(team1.id);
+        const t2 = teams.get(team2.id);
         const data = [
-            [team1Defender, team2Defender],
-            [team1Attacker, team2Attacker],
+            [team1Defender && team1Defender.name, team2Defender && team2Defender.name],
+            [team1Attacker && team1Attacker.name, team2Attacker && team2Attacker.name],
             [team1.score, team2.score],
             [Big(team1.elo).toFixed(2), Big(team2.elo).toFixed(2)],
             [Big(team1.ratingChange).toFixed(2), Big(team2.ratingChange).toFixed(2)],
@@ -68,8 +70,8 @@ class ShowGame extends Component<Props> {
             [Big(team1.trueskillSigma).toFixed(2), Big(team2.trueskillSigma).toFixed(2)],
             [Big(team1.trueskillChange).toFixed(2), Big(team2.trueskillChange).toFixed(2)],
             [team1Wins, team2Wins],
-            [teams.get(team1.id).wins, teams.get(team2.id).wins],
-            [teams.get(team1.id).losses, teams.get(team2.id).losses],
+            [t1 && t1.wins, t2 && t2.wins],
+            [t1 && t1.losses, t2 && t2.losses],
         ].concat(last5Games.map(g =>
             this.isSameTeam(g.team1, team1) ? [g.team1.score, g.team2.score] : [g.team2.score, g.team1.score]
         ));

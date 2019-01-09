@@ -3,22 +3,22 @@
 import {produce} from 'immer';
 import type {ApiBasicPlayer} from './playerReducer';
 
-interface ICreateTeam {
+type ICreateTeam = {
     player1Id: number,
     player2Id: number,
-}
+};
 
-export interface ITeam extends ICreateTeam {
+export type ITeam = ICreateTeam & {
     id: number,
     elo: number,
     wins: number,
     losses: number,
     trueskill: number,
     trueskillSigma: number,
-}
+};
 
 
-interface ApiTeam {
+type ApiTeam = {
     id: number,
     player1: ApiBasicPlayer,
     player2: ApiBasicPlayer,
@@ -27,15 +27,15 @@ interface ApiTeam {
     trueskill_sigma: number,
     wins: number,
     losses: number
-}
+};
 
 export type TeamsType = Map<number, ITeam>;
 
-export interface ITeamStore {
+export type ITeamStore = {
     teams: TeamsType,
     loading: boolean,
     error: string
-}
+};
 
 export const GET_TEAMS = 'teams/LOAD';
 export const GET_TEAMS_SUCCESS = 'teams/LOAD_SUCCESS';
@@ -49,7 +49,7 @@ export const CREATE_TEAM = 'team/CREATE';
 export const CREATE_TEAM_SUCCESS = 'team/CREATE_SUCCESS';
 export const CREATE_TEAM_FAIL = 'team/CREATE_FAIL';
 
-const teamReducer = produce((draft: ITeamStore, action) => {
+const teamReducer = produce((draft: ITeamStore, action: Object): ITeamStore | void => {
     switch (action.type) {
         case GET_TEAMS:
         case GET_TEAM:

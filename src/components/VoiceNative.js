@@ -13,9 +13,28 @@ import {
 } from 'react-native';
 import Voice from 'react-native-voice';
 
+type VoiceEvent = {
+    error: string,
+    value: string[],
+};
+
+type VolumeVoiceEvent = {
+    value: string,
+} & VoiceEvent;
 
 type Props = {};
-export default class VoiceNative extends Component<Props> {
+
+type State = {
+    recognized: boolean,
+    pitch: string,
+    error: string,
+    end: boolean,
+    started: boolean,
+    results: string[],
+    partialResults: string[],
+};
+
+class VoiceNative extends Component<Props, State> {
     state = {
         recognized: false,
         pitch: '',
@@ -26,7 +45,7 @@ export default class VoiceNative extends Component<Props> {
         partialResults: [],
     };
 
-    constructor(props) {
+    constructor(props: Props) {
         super(props);
         Voice.onSpeechStart = this.onSpeechStart.bind(this);
         Voice.onSpeechRecognized = this.onSpeechRecognized.bind(this);
@@ -41,57 +60,57 @@ export default class VoiceNative extends Component<Props> {
         Voice.destroy().then(Voice.removeAllListeners);
     }
 
-    onSpeechStart(e) {
+    onSpeechStart() {
         this.setState({
             started: true,
         });
     }
 
-    onSpeechRecognized(e) {
+    onSpeechRecognized() {
         this.setState({
             recognized: true,
         });
     }
 
-    onSpeechEnd(e) {
+    onSpeechEnd() {
         this.setState({
             end: true,
         });
     }
 
-    onSpeechError(e) {
+    onSpeechError(e: VoiceEvent) {
         this.setState({
             error: JSON.stringify(e.error),
         });
     }
 
-    onSpeechResults(e) {
+    onSpeechResults(e: VoiceEvent) {
         this.setState({
             results: e.value,
         });
     }
 
-    onSpeechPartialResults(e) {
+    onSpeechPartialResults(e: VoiceEvent) {
         this.setState({
             partialResults: e.value,
         });
     }
 
-    onSpeechVolumeChanged(e) {
+    onSpeechVolumeChanged(e: VolumeVoiceEvent) {
         this.setState({
             pitch: e.value,
         });
     }
 
-    async _startRecognizing(e) {
+    async _startRecognizing() {
         this.setState({
-            recognized: '',
+            recognized: false,
             pitch: '',
             error: '',
-            started: '',
+            started: true,
             results: [],
             partialResults: [],
-            end: ''
+            end: false,
         });
         try {
             if (!this.state.started) {
@@ -102,7 +121,7 @@ export default class VoiceNative extends Component<Props> {
         }
     }
 
-    async _stopRecognizing(e) {
+    async _stopRecognizing() {
         try {
             await Voice.stop();
         } catch (e) {
@@ -110,7 +129,7 @@ export default class VoiceNative extends Component<Props> {
         }
     }
 
-    async _cancelRecognizing(e) {
+    async _cancelRecognizing() {
         try {
             await Voice.cancel();
         } catch (e) {
@@ -118,7 +137,7 @@ export default class VoiceNative extends Component<Props> {
         }
     }
 
-    async _destroyRecognizer(e) {
+    async _destroyRecognizer() {
         try {
             await Voice.destroy();
         } catch (e) {
@@ -131,7 +150,7 @@ export default class VoiceNative extends Component<Props> {
             started: false,
             results: [],
             partialResults: [],
-            end: false
+            end: false,
         });
     }
 
@@ -252,5 +271,7 @@ const styles = StyleSheet.create({
         marginBottom: 1,
     },
 });
+
+export default VoiceNative;
 
 AppRegistry.registerComponent('VoiceNative', () => VoiceNative);

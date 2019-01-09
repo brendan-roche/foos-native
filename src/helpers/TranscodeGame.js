@@ -28,8 +28,8 @@ export default class TranscodeGame {
         });
     }
 
-    transcode(text: string): ICreateGame {
-        const numbersRegEx = '10|[0-9]|(?:zero|none|donut|one|won|too?|two|three|fou?r|five|six|seven|eight|ate|nine|ten)';
+    transcode(text: string): $Shape<ICreateGame> {
+        const numbersRegEx = '10|[0-9]|(?:zero|none|do(?:ugh)?nut|one|won|too?|two|three|fou?r|five|six|seven|eight|ate|nine|ten)';
         const teamScoreRegEx = `([a-z]+(?:(?! and) [a-z]+\\b)?)(?: and\\b)? ?([a-z]+(?:(?! (?:${numbersRegEx})) [a-z]+\\b)?) (${numbersRegEx})`;
         const gameRegEx = new RegExp(`^${teamScoreRegEx}(?: ${teamScoreRegEx})?`, 'i');
         const parts = gameRegEx.exec(text);
@@ -51,22 +51,22 @@ export default class TranscodeGame {
             : null;
 
         const team1 = {
-            ...(team1DefenderId && {defenderId: team1DefenderId}),
-            ...(team1AttackerId && {attackerId: team1AttackerId}),
-            ...(typeof team1Score !== 'undefined' && {score: team1Score}),
+            ...(team1DefenderId ? {defenderId: team1DefenderId} : {}),
+            ...(team1AttackerId ? {attackerId: team1AttackerId} : {}),
+            ...(team1Score != null ? {score: team1Score} : {}),
         };
 
         const team2 = {
-            ...(team2DefenderId && {defenderId: team2DefenderId}),
-            ...(team2AttackerId && {attackerId: team2AttackerId}),
-            ...(typeof team2Score !== 'undefined' && {score: team2Score}),
+            ...(team2DefenderId ? {defenderId: team2DefenderId} : {}),
+            ...(team2AttackerId ? {attackerId: team2AttackerId} : {}),
+            ...(team2Score != null ? {score: team2Score} : {}),
         };
 
         // console.log('transcode: ', text, parts, team1, team2);
 
         return {
-            ...(Object.keys(team1).length > 0 && {team1}),
-            ...(Object.keys(team2).length > 0 && {team2}),
+            ...(Object.keys(team1).length > 0 ? {team1} : {}),
+            ...(Object.keys(team2).length > 0 ? {team2} : {}),
         };
     };
 
@@ -84,6 +84,7 @@ export default class TranscodeGame {
             zero: 0,
             none: 0,
             donut: 0,
+            doughnut: 0,
             one: 1,
             won: 1,
             to: 2,

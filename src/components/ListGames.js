@@ -7,14 +7,16 @@ import { RecyclerListView, DataProvider, LayoutProvider } from 'recyclerlistview
 import type {RootStore} from '../reducers';
 import type {IGame} from '../reducers/gameReducer';
 import {getGames} from '../reducers/gameReducer';
-import type {TeamsType} from '../reducers/teamReducer';
+import type { PlayersType } from '../reducers/playerReducer';
 
 type Props = {
-    players: TeamsType,
+    players: PlayersType,
     games: IGame[],
+    getGames: Function,
     loading: boolean,
     filter?: (game: IGame) => boolean,
-}
+    navigation: any
+};
 
 type State = {
     dataProvider: DataProvider,
@@ -34,6 +36,7 @@ type DimensionsType = {
 
 class ListGames extends Component<Props, State> {
     recyclerView: RecyclerListView;
+    _layoutProvider: LayoutProvider;
 
     constructor(props: Props) {
         super(props);
@@ -79,17 +82,21 @@ class ListGames extends Component<Props, State> {
     _rowRenderer = (type: number, game: IGame) => {
         const { players } = this.props;
         const {team1, team2} = game;
+        const t1Defender = team1.defenderId && players.get(team1.defenderId);
+        const t1Attacker = team1.attackerId && players.get(team1.attackerId);
+        const t2Defender = team2.defenderId && players.get(team2.defenderId);
+        const t2Attacker = team2.attackerId && players.get(team2.attackerId);
         return (
             <>
                 <TouchableOpacity
                     style={type === ViewTypes.EVEN ? styles.rowEven : styles.rowOdd}
                     onPress={this.showGame(game)}
                 >
-                    <Text style={styles.nameCol}>{players.get(team1.defenderId).name}</Text>
-                    <Text style={styles.nameCol}>{players.get(team1.attackerId).name}</Text>
+                    <Text style={styles.nameCol}>{t1Defender && t1Defender.name}</Text>
+                    <Text style={styles.nameCol}>{t1Attacker && t1Attacker.name}</Text>
                     <Text style={styles.scoreCol}>{team1.score}</Text>
-                    <Text style={styles.nameCol}>{players.get(team2.defenderId).name}</Text>
-                    <Text style={styles.nameCol}>{players.get(team2.attackerId).name}</Text>
+                    <Text style={styles.nameCol}>{t2Defender && t2Defender.name}</Text>
+                    <Text style={styles.nameCol}>{t2Attacker && t2Attacker.name}</Text>
                     <Text style={styles.scoreCol}>{team2.score}</Text>
                 </TouchableOpacity>
             </>

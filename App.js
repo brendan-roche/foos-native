@@ -20,6 +20,7 @@ import NavToPlayer from './src/components/NavToPlayer';
 import NavToGames from './src/components/NavToGames';
 import ListTeams from './src/components/ListTeams';
 import NavToTeams from './src/components/NavToTeams';
+import NavToTeam from './src/components/NavToTeam';
 
 if(__DEV__) {
     import('./src/tools/ReactotronConfig')

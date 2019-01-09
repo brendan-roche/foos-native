@@ -1,3 +1,4 @@
+// @flow
 import React, {Component} from 'react';
 import {View, findNodeHandle, Image, StyleSheet, Text} from 'react-native';
 import {BlurView} from 'react-native-blur';
@@ -9,6 +10,9 @@ import {getTeams} from '../reducers/teamReducer';
 import {getGames} from '../reducers/gameReducer';
 import connect from 'react-redux/es/connect/connect';
 import type {RootStore} from '../reducers';
+import type { PlayersType } from '../reducers/playerReducer';
+import type { TeamsType } from '../reducers/teamReducer';
+import type { GamesType } from '../reducers/gameReducer';
 
 type Props = {
     getPlayers: () => Object,
@@ -18,7 +22,7 @@ type Props = {
     error: string | null,
     players: PlayersType,
     teams: TeamsType,
-    game: GamesType,
+    games: GamesType,
     navigation: any
 }
 
@@ -27,7 +31,7 @@ type State = {
 }
 
 class HomeScreen extends Component<Props, State> {
-    backgroundImage: Image;
+    backgroundImage: ?Image;
 
     state = { viewRef: null };
 
@@ -64,7 +68,7 @@ class HomeScreen extends Component<Props, State> {
                     textStyle={styles.spinnerTextStyle}
                 /> }
                 <Image
-                    ref={(img) => { this.backgroundImage = img; }}
+                    ref={(img: ?Image) => { this.backgroundImage = img; }}
                     source={require('../../assets/images/foosball-1.jpg')}
                     style={styles.backgroundImage}
                     onLoadEnd={this.imageLoaded}

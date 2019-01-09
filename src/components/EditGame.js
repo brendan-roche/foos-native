@@ -39,7 +39,7 @@ type State = ICreateGame & {
 };
 
 class EditGame extends Component<Props, State> {
-    _voiceToText: VoiceToText;
+    _voiceToText: VoiceToText | null;
 
     constructor(props: Props) {
         super(props);
@@ -82,7 +82,7 @@ class EditGame extends Component<Props, State> {
             this.state.team1.defenderId,
             this.state.team2.attackerId,
             this.state.team2.defenderId,
-        ].filter((item: number): Boolean => Boolean(item));
+        ].filter((item: ?number): boolean => Boolean(item));
 
         const {players} = this.props;
         return [{id: 0, name: 'Select Player', active: true}]
@@ -122,12 +122,12 @@ class EditGame extends Component<Props, State> {
         };
     };
 
-    findTeamFromPlayers(player1Id: number, player2Id: number): ITeam | null {
-        const {playerTeams} = this.props;
+    findTeamFromPlayers(player1Id: number, player2Id: number): ?ITeam {
+        const { playerTeams, teams } = this.props;
 
         const teamId = (playerTeams[player1Id] && playerTeams[player1Id][player2Id]) ||
             (playerTeams[player2Id] && playerTeams[player2Id][player1Id]);
-        return teamId ? this.props.teams.get(teamId) : null;
+        return teamId ? teams.get(teamId) : null;
     }
 
     saveGame = () => {
@@ -140,7 +140,7 @@ class EditGame extends Component<Props, State> {
     isValidGame = () => {
         const {team1, team2} = this.state;
         return team1.defenderId && team1.attackerId && team2.defenderId && team2.attackerId
-            && (team1.score > team2.score || team2.score > team1.score)
+            && team1.score != null && team2.score != null && (team1.score > team2.score || team2.score > team1.score)
             && [...new Set([team1.defenderId, team2.attackerId, team2.defenderId, team1.attackerId])].length === 4;
     };
 
@@ -149,7 +149,7 @@ class EditGame extends Component<Props, State> {
         const game = (new TranscodeGame(Array.from(this.props.players.values()))).transcode(speech);
 
         // If we have successfully transcoded the game we can stop listening
-        if (game.team2 && game.team2.score) {
+        if (game.team2 && game.team2.score && this._voiceToText) {
             this._voiceToText.stopListening();
         }
         this.setState({
@@ -162,7 +162,7 @@ class EditGame extends Component<Props, State> {
         this.setState({listening});
     };
 
-    voiceToTextRef = (voiceToText: Component<VoiceToText>) => {
+    voiceToTextRef = (voiceToText: VoiceToText | null) => {
         this._voiceToText = voiceToText;
     };
 
@@ -356,10 +356,10 @@ const mapDispatchToProps = dispatch => ({
         Promise.all([
             dispatch(getTeam(team1.id)),
             dispatch(getTeam(team2.id)),
-            dispatch(getPlayer(team1.defenderId)),
-            dispatch(getPlayer(team1.attackerId)),
-            dispatch(getPlayer(team2.defenderId)),
-            dispatch(getPlayer(team2.attackerId)),
+            ...(team1.defenderId ? dispatch(getPlayer(team1.defenderId)) : []),
+            ...(team1.attackerId ? dispatch(getPlayer(team1.attackerId)) : []),
+            ...(team2.defenderId ? dispatch(getPlayer(team2.defenderId)) : []),
+            ...(team2.attackerId ? dispatch(getPlayer(team2.attackerId)) : []),
         ]).then(() => {
             dispatch(clearNewGame())
         })

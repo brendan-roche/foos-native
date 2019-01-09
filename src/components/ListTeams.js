@@ -15,6 +15,8 @@ type Props = {
     players: PlayersType,
     teams: ITeam[],
     loading: boolean,
+    getTeams: Function,
+    navigation: any,
 }
 
 type State = {
@@ -35,6 +37,7 @@ type DimensionsType = {
 
 class ListTeams extends Component<Props, State> {
     recyclerView: RecyclerListView;
+    _layoutProvider: LayoutProvider;
 
     constructor(props: Props) {
         super(props);
@@ -124,10 +127,11 @@ class ListTeams extends Component<Props, State> {
         this.recyclerView = ref
     };
 
-    getPlayerName(team: ITeam, playerNumber: number = 1) {
+    getPlayerName(team: ITeam, playerNumber: number = 1): string {
         const { players } = this.props;
-        const playerId = playerNumber === 1 ? 'player1Id' : 'player2Id';
-        return players.get(team[playerId]).name;
+        const playerId = playerNumber === 1 ? team.player1Id : team.player2Id;
+        const player = players.get(playerId);
+        return (player && player.name) || '';
     }
 
     render() {
@@ -183,12 +187,21 @@ class ListTeams extends Component<Props, State> {
     }
 }
 
+function getPlayerById(playerId: number, players: PlayersType): IPlayer {
+    const player = players.get(playerId)
+    if (!player) {
+        throw new Error(`Player with id ${playerId} doesn't exist`);
+    }
+
+    return player;
+}
+
 function compareTeams(sortCol: string, ascending: boolean, t1: ITeam, t2: ITeam): number {
     if (['player1', 'player2'].indexOf(sortCol) !== -1) {
         const { players } = this.props;
         return sortCol === 'player1'
-            ? comparePlayers('name', ascending, players.get(t1.player1Id), players.get(t2.player1Id))
-            : comparePlayers('name', ascending, players.get(t1.player2Id), players.get(t2.player2Id));
+            ? comparePlayers('name', ascending, getPlayerById(t1.player1Id, players), getPlayerById(t2.player1Id, players))
+            : comparePlayers('name', ascending, getPlayerById(t1.player2Id, players), getPlayerById(t2.player2Id, players));
     }
     if ((t1[sortCol] < t2[sortCol] && ascending) || (t1[sortCol] > t2[sortCol] && !ascending)) {
         return -1;
