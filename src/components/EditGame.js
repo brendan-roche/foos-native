@@ -135,17 +135,24 @@ const mapStateToProps = (state: RootStore) => {
 
 const mapDispatchToProps = dispatch => ({
   createGame: (game: ICreateGame) => dispatch(createGame(game)),
-  reloadPlayersAndTeams: (team1: GameTeamType, team2: GameTeamType): Promise<Object> =>
-    Promise.all([
-      dispatch(getTeam(team1.id)),
-      dispatch(getTeam(team2.id)),
-      ...(team1.defenderId ? dispatch(getPlayer(team1.defenderId)) : []),
-      ...(team1.attackerId ? dispatch(getPlayer(team1.attackerId)) : []),
-      ...(team2.defenderId ? dispatch(getPlayer(team2.defenderId)) : []),
-      ...(team2.attackerId ? dispatch(getPlayer(team2.attackerId)) : []),
-    ]).then(() => {
-      dispatch(clearNewGame());
-    }),
+  reloadPlayersAndTeams: (team1: GameTeamType, team2: GameTeamType): Promise<Object> => {
+    const { defenderId: t1DefId, attackerId: t1AtkId } = team1;
+    const { defenderId: t2DefId, attackerId: t2AtkId } = team2;
+    if (t1AtkId && t1DefId && t2AtkId && t2DefId) {
+      return Promise.all([
+        dispatch(getTeam(team1.id)),
+        dispatch(getTeam(team2.id)),
+        dispatch(getPlayer(t1DefId)),
+        dispatch(getPlayer(t1AtkId)),
+        dispatch(getPlayer(t2DefId)),
+        dispatch(getPlayer(t2AtkId)),
+      ]).then(() => {
+        dispatch(clearNewGame());
+      });
+    }
+
+    return Promise.resolve();
+  },
 });
 
 class EditGame extends Component<Props, State> {
