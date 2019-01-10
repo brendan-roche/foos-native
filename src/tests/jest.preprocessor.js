@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Copyright (c) 2015-present, Facebook, Inc.
  *
@@ -10,9 +11,7 @@
 
 /* eslint-env node */
 
-'use strict';
-
-const {transformSync: babelTransformSync} = require('@babel/core');
+const { transformSync: babelTransformSync } = require('@babel/core');
 /* $FlowFixMe(>=0.54.0 site=react_native_oss) This comment suppresses an error
  * found when Flow v0.54 was deployed. To see the error delete this comment and
  * run Flow. */
@@ -35,8 +34,9 @@ babelRegisterOnly([]);
 
 /* $FlowFixMe(site=react_native_oss) */
 const transformer = require('metro/src/reactNativeTransformer');
+
 module.exports = {
-  process(src /*: string */, file /*: string */) {
+  process(src /* : string */, file /* : string */) {
     if (nodeFiles.test(file)) {
       // node specific transforms only
       return babelTransformSync(src, {
@@ -47,7 +47,7 @@ module.exports = {
       }).code;
     }
 
-    const {ast} = transformer.transform({
+    const { ast } = transformer.transform({
       filename: file,
       options: {
         ast: true, // needed for open source (?) https://github.com/facebook/react-native/commit/f8d6b97140cffe8d18b2558f94570c8d1b410d5c#r28647044
@@ -71,7 +71,7 @@ module.exports = {
         [
           require('@babel/plugin-proposal-class-properties'),
           // use `this.foo = bar` instead of `this.defineProperty('foo', ...)`
-          {loose: true},
+          { loose: true },
         ],
         [require('@babel/plugin-transform-computed-properties')],
         [require('@babel/plugin-transform-destructuring')],
@@ -85,7 +85,10 @@ module.exports = {
         [require('@babel/plugin-transform-unicode-regex')],
         [
           require('@babel/plugin-transform-modules-commonjs'),
-          {strict: false, allowTopLevelThis: true},
+          {
+            strict: false,
+            allowTopLevelThis: true,
+          },
         ],
         [require('@babel/plugin-transform-classes')],
         [require('@babel/plugin-transform-arrow-functions')],
@@ -93,11 +96,11 @@ module.exports = {
         [require('@babel/plugin-proposal-object-rest-spread')],
         [
           require('@babel/plugin-transform-template-literals'),
-          {loose: true}, // dont 'a'.concat('b'), just use 'a'+'b'
+          { loose: true }, // dont 'a'.concat('b'), just use 'a'+'b'
         ],
         [require('@babel/plugin-transform-exponentiation-operator')],
         [require('@babel/plugin-transform-object-assign')],
-        [require('@babel/plugin-transform-for-of'), {loose: true}],
+        [require('@babel/plugin-transform-for-of'), { loose: true }],
         [require('@babel/plugin-transform-react-display-name')],
         [require('@babel/plugin-transform-react-jsx-source')],
       ],

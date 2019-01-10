@@ -1,20 +1,20 @@
 // @flow
 import { combineReducers } from 'redux';
+import type { IPlayerStore } from './playerReducer';
 import players from './playerReducer';
+import type { IGameStore } from './gameReducer';
 import games from './gameReducer';
+import type { ITeamStore } from './teamReducer';
 import teams from './teamReducer';
-import type {IGameStore} from './gameReducer';
-import type {IPlayerStore} from './playerReducer';
-import type {ITeamStore} from "./teamReducer";
 
 export interface RootStore {
-    players: IPlayerStore,
-    games: IGameStore,
-    teams: ITeamStore
+  players: IPlayerStore;
+  games: IGameStore;
+  teams: ITeamStore;
 }
 
 export default combineReducers({
-    players,
-    games,
-    teams
-})
+  players,
+  games,
+  teams,
+});

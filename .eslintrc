@@ -1,0 +1,46 @@
+{
+  "parser": "babel-eslint",
+  "extends": [
+    "airbnb",
+    "plugin:flowtype/recommended",
+    "prettier",
+    "prettier/flowtype",
+    "prettier/react"
+  ],
+  "plugins": [
+    "react",
+    "flowtype",
+    "jsx-a11y",
+    "import"
+  ],
+  "rules": {
+    "no-param-reassign": [
+      "error",
+      {
+        "props": true,
+        "ignorePropertyModificationsFor": ["draft"]
+      }
+    ],
+    "func-names": ["error", "never"],
+
+    "react/jsx-filename-extension": [
+      1, { "extensions": [".js"] }
+    ],
+    "react/prefer-stateless-function": [
+      2, { "ignorePureComponents": true }
+    ],
+    "react/forbid-prop-types": [0, { "forbid": [] }],
+    "import/extensions": [1, "never", { "svg": "always" }],
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": true,
+        "optionalDependencies": false,
+        "peerDependencies": false
+      }
+    ]
+  },
+  "env": {
+    "jest": true
+  }
+}
