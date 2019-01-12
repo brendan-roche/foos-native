@@ -25,13 +25,13 @@ import NavToTeam from './src/components/NavToTeam';
 // eslint-disable-next-line no-undef
 if (__DEV__) {
   // eslint-disable-next-line global-require
-  const MessageQueue = require('react-native/Libraries/BatchedBridge/MessageQueue.js');
-  const spyFunction = (msg: any) => {
-    // eslint-disable-next-line no-console
-    console.log(msg);
-  };
-
-  MessageQueue.spy(spyFunction);
+  // const MessageQueue = require('react-native/Libraries/BatchedBridge/MessageQueue.js');
+  // const spyFunction = (msg: any) => {
+  //   // eslint-disable-next-line no-console
+  //   console.log(msg);
+  // };
+  //
+  // MessageQueue.spy(spyFunction);
 
   // eslint-disable-next-line no-console
   import('./src/tools/ReactotronConfig').then(() => console.log('Reactotron Configured'));
@@ -40,6 +40,12 @@ if (__DEV__) {
 const client = axios.create({
   baseURL: API_BASE_URL,
   responseType: 'json',
+  // access to fetch requests on aws blocked
+  // https://stackoverflow.com/questions/53203024/access-to-fetch-at-aws-lambda-site-from-origin-http-localhost3000-has-been
+  headers: {
+    'access-control-allow-origin': 'localhost',
+    'access-control-allow-credentials': 'true',
+  },
 });
 
 const store = Reactotron.createStore(reducer, applyMiddleware(axiosMiddleware(client)));
