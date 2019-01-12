@@ -114,6 +114,16 @@ android {
         renderscriptTargetApi 23
         renderscriptSupportModeEnabled true
     }
+    signingConfigs {
+        release {
+            if (project.hasProperty('FOOS_RELEASE_STORE_FILE')) {
+                storeFile file(FOOS_RELEASE_STORE_FILE)
+                storePassword FOOS_RELEASE_STORE_PASSWORD
+                keyAlias FOOS_RELEASE_KEY_ALIAS
+                keyPassword FOOS_RELEASE_KEY_PASSWORD
+            }
+        }
+    }
     splits {
         abi {
             reset()
@@ -126,6 +136,7 @@ android {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release
