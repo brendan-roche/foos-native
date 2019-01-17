@@ -4,6 +4,7 @@ import { Button, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import { Big } from 'big.js';
 import { NavigationActions } from 'react-navigation';
+import type { NavigationScreenProp, NavigationStateRoute } from 'react-navigation';
 
 import { Col, Rows, Table, TableWrapper } from 'react-native-table-component';
 import type { RootStore } from '../reducers';
@@ -15,7 +16,7 @@ type Props = {
   team: ITeam,
   games: GamesType,
   players: PlayersType,
-  navigation: any,
+  navigation: NavigationScreenProp<NavigationStateRoute>,
 };
 
 const styles = StyleSheet.create({
@@ -71,14 +72,12 @@ const mapStateToProps = (state: RootStore, ownProps: Props) => {
 class ShowTeam extends Component<Props> {
   goHome = () => {
     const { navigation } = this.props;
-    navigation.reset(
-      [
-        NavigationActions.navigate({
-          routeName: 'Home',
-        }),
-      ],
-      0,
-    );
+    const navAction = NavigationActions.navigate({
+      routeName: 'Home',
+    });
+    if (navigation.reset) {
+      navigation.reset([navAction], 0);
+    }
   };
 
   showGames = () => {

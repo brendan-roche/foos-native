@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Dimensions, RefreshControl, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 import { DataProvider, LayoutProvider, RecyclerListView } from 'recyclerlistview';
+import type { NavigationScreenProp, NavigationStateRoute } from 'react-navigation';
 
 import type { RootStore } from '../reducers';
 import type { IGame } from '../reducers/gameReducer';
@@ -17,7 +18,7 @@ type Props = {
   loading: boolean,
   // eslint-disable-next-line react/no-unused-prop-types
   filter?: (game: IGame) => boolean,
-  navigation: any,
+  navigation: NavigationScreenProp<NavigationStateRoute>,
 };
 
 type State = {

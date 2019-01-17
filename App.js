@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class App extends Component<{}> {
+export default class App extends Component<*> {
   // eslint-disable-next-line react/sort-comp
   navigator: ?typeof AppContainer;
 

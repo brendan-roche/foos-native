@@ -103,7 +103,7 @@ export function createTeam(team: ICreateTeam): Object {
   };
 }
 
-const teamReducer = produce(
+const teamReducer = produce<ITeamStore, Object>(
   (draft: ITeamStore, action: Object): ITeamStore | void => {
     // eslint-disable-next-line default-case
     switch (action.type) {

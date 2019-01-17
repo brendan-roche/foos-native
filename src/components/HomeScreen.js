@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { findNodeHandle, Image, StyleSheet, Text, View } from 'react-native';
+import type { NavigationScreenProp, NavigationStateRoute } from 'react-navigation';
 import { BlurView } from 'react-native-blur';
 import Spinner from 'react-native-loading-spinner-overlay';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -23,7 +24,7 @@ type Props = {
   players: PlayersType,
   teams: TeamsType,
   games: GamesType,
-  navigation: any,
+  navigation: NavigationScreenProp<NavigationStateRoute>,
 };
 
 type State = {

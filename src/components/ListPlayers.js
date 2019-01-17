@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Big } from 'big.js';
 import { DataProvider, LayoutProvider, RecyclerListView } from 'recyclerlistview';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import type { NavigationScreenProp, NavigationStateRoute } from 'react-navigation';
 
 import type { RootStore } from '../reducers';
 import type { IPlayer } from '../reducers/playerReducer';
@@ -14,7 +15,7 @@ type Props = {
   players: IPlayer[],
   loading: boolean,
   getPlayers: Function,
-  navigation: any,
+  navigation: NavigationScreenProp<NavigationStateRoute>,
 };
 
 type State = {

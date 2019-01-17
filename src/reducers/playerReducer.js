@@ -107,7 +107,7 @@ export function createPlayer(player: ICreatePlayer): Object {
   };
 }
 
-const playerReducer = produce(
+const playerReducer = produce<IPlayerStore, Object>(
   (draft: IPlayerStore, action: Object): IPlayerStore | void => {
     // eslint-disable-next-line default-case
     switch (action.type) {

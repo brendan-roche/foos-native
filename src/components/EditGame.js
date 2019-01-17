@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { produce } from 'immer';
 import { NavigationActions } from 'react-navigation';
 import { Big } from 'big.js';
+import type { NavigationScreenProp, NavigationStateRoute } from 'react-navigation';
 
 import type { PlayersType } from '../reducers/playerReducer';
 import { getPlayer } from '../reducers/playerReducer';
@@ -30,7 +31,7 @@ type Props = {
   team1AttackerId?: number,
   team2DefenderId?: number,
   team2AttackerId?: number,
-  navigation: any,
+  navigation: NavigationScreenProp<NavigationStateRoute>,
 };
 
 type State = ICreateGame & {
@@ -192,15 +193,12 @@ class EditGame extends Component<Props, State> {
     }
 
     if (prevProps.newGame && !newGame) {
-      navigation.reset(
-        [
-          NavigationActions.navigate({
-            routeName: 'NavToGame',
-            params: { game: prevProps.newGame },
-          }),
-        ],
-        0,
-      );
+      const navAction = NavigationActions.navigate({
+        routeName: 'NavToGame',
+      });
+      if (navigation.reset) {
+        navigation.reset([navAction], 0);
+      }
     }
   }
 

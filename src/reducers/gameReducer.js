@@ -170,7 +170,7 @@ export function clearNewGame(): Object {
   };
 }
 
-const gameReducer = produce(
+const gameReducer = produce<IGameStore, Object>(
   (draft: IGameStore, action: Object): IGameStore | void => {
     // eslint-disable-next-line default-case
     switch (action.type) {

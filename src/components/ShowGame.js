@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import { Big } from 'big.js';
+import type { NavigationScreenProp, NavigationStateRoute } from 'react-navigation';
 
 import { Col, Row, Rows, Table, TableWrapper } from 'react-native-table-component';
 import type { RootStore } from '../reducers';
@@ -17,7 +18,7 @@ type Props = {
   teams: TeamsType,
   players: PlayersType,
   games: GamesType,
-  navigation: any,
+  navigation: NavigationScreenProp<NavigationStateRoute>,
 };
 
 const styles = StyleSheet.create({

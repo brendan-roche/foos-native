@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Big } from 'big.js';
 import { DataProvider, LayoutProvider, RecyclerListView } from 'recyclerlistview';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import type { NavigationScreenProp, NavigationStateRoute } from 'react-navigation';
 
 import type { RootStore } from '../reducers';
 import type { ITeam } from '../reducers/teamReducer';
@@ -16,7 +17,7 @@ type Props = {
   teams: ITeam[],
   loading: boolean,
   getTeams: Function,
-  navigation: any,
+  navigation: NavigationScreenProp<NavigationStateRoute>,
 };
 
 type State = {

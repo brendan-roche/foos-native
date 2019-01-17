@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import { Big } from 'big.js';
+import type { NavigationScreenProp, NavigationStateRoute } from 'react-navigation';
 
 import { Col, Rows, Table, TableWrapper } from 'react-native-table-component';
 import { NavigationActions } from 'react-navigation';
@@ -18,7 +19,7 @@ type Props = {
   games: GamesType,
   // eslint-disable-next-line react/no-unused-prop-types
   players: PlayersType,
-  navigation: any,
+  navigation: NavigationScreenProp<NavigationStateRoute>,
 };
 
 const styles = StyleSheet.create({
@@ -73,14 +74,12 @@ function isPartOfTeam(player: IPlayer, team: ITeam): boolean {
 class ShowPlayer extends Component<Props> {
   goHome = () => {
     const { navigation } = this.props;
-    navigation.reset(
-      [
-        NavigationActions.navigate({
-          routeName: 'Home',
-        }),
-      ],
-      0,
-    );
+    const navAction = NavigationActions.navigate({
+      routeName: 'Home',
+    });
+    if (navigation.reset) {
+      navigation.reset([navAction], 0);
+    }
   };
 
   showGames = () => {
