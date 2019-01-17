@@ -122,3 +122,8 @@ Testing signed build
 ```
 react-native run-android --variant=release
 ```
+
+### Troubleshooting
+
+Android compiling issues:
+https://github.com/react-native-community/react-native-blur/pull/283

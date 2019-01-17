@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Dimensions, RefreshControl, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 import { DataProvider, LayoutProvider, RecyclerListView } from 'recyclerlistview';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import type { NavigationScreenProp, NavigationStateRoute } from 'react-navigation';
 
 import type { RootStore } from '../reducers';
@@ -87,6 +88,19 @@ class ListGames extends Component<Props, State> {
 
   layoutProvider: LayoutProvider;
 
+  static navigationOptions = {
+    headerTitle: (
+      <FontAwesome.Button
+        name="soccer-ball-o"
+        backgroundColor="transparent"
+        underlayColor="transparent"
+        color="black"
+      >
+        <Text style={{ fontSize: 15 }}>Games</Text>
+      </FontAwesome.Button>
+    ),
+  };
+
   static defaultProps = {
     filter: undefined,
   };
@@ -122,7 +136,7 @@ class ListGames extends Component<Props, State> {
 
   showGame = (game: IGame) => () => {
     const { navigation } = this.props;
-    navigation.navigate('NavToGame', { game });
+    navigation.navigate('ShowGame', { game });
   };
 
   rowRenderer = (type: number, game: IGame) => {
@@ -181,12 +195,17 @@ class ListGames extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: RootStore, ownProps: Props) => {
+const mapStateToProps = (state: RootStore, ownProps: Props): $Shape<Props> => {
   let games = Array.from(state.games.games.values());
-  if (ownProps.filter) {
-    games = games.filter(ownProps.filter);
+
+  if (ownProps.navigation.state.params) {
+    const { filter } = ownProps.navigation.state.params;
+    if (typeof filter === 'function') {
+      games = games.filter(filter);
+    }
   }
   return {
+    ...(ownProps.navigation.state.params ? ownProps.navigation.state.params : {}),
     loading: state.games.loading,
     players: state.players.players,
     games,

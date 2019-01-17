@@ -3,20 +3,21 @@ import React, { Component } from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import { Big } from 'big.js';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import type { NavigationScreenProp, NavigationStateRoute } from 'react-navigation';
 
 import { Col, Rows, Table, TableWrapper } from 'react-native-table-component';
 import { NavigationActions } from 'react-navigation';
 import type { RootStore } from '../reducers';
 import type { IPlayer, PlayersType } from '../reducers/playerReducer';
-import type { ITeam, TeamsType } from '../reducers/teamReducer';
-import type { GamesType, GameTeamType, IGame } from '../reducers/gameReducer';
+import type { ITeam } from '../reducers/teamReducer';
+import type { GameTeamType, IGame } from '../reducers/gameReducer';
 
 type Props = {
   player: IPlayer,
   // eslint-disable-next-line react/no-unused-prop-types
-  teams: TeamsType,
-  games: GamesType,
+  teams: ITeam[],
+  games: IGame[],
   // eslint-disable-next-line react/no-unused-prop-types
   players: PlayersType,
   navigation: NavigationScreenProp<NavigationStateRoute>,
@@ -72,6 +73,19 @@ function isPartOfTeam(player: IPlayer, team: ITeam): boolean {
 }
 
 class ShowPlayer extends Component<Props> {
+  static navigationOptions = {
+    headerTitle: (
+      <FontAwesome.Button
+        name="users"
+        backgroundColor="transparent"
+        underlayColor="transparent"
+        color="black"
+      >
+        <Text style={{ fontSize: 15 }}>Player</Text>
+      </FontAwesome.Button>
+    ),
+  };
+
   goHome = () => {
     const { navigation } = this.props;
     const navAction = NavigationActions.navigate({
@@ -84,7 +98,7 @@ class ShowPlayer extends Component<Props> {
 
   showGames = () => {
     const { player, navigation } = this.props;
-    navigation.navigate('NavToGames', { filter: (game: IGame) => isPartOfGame(player, game) });
+    navigation.navigate('Games', { filter: (game: IGame) => isPartOfGame(player, game) });
   };
 
   render() {
@@ -165,10 +179,11 @@ class ShowPlayer extends Component<Props> {
   }
 }
 
-const mapStateToProps = (state: RootStore, ownProps: Props) => {
-  const { player } = ownProps;
+const mapStateToProps = (state: RootStore, ownProps: Props): $Shape<Props> => {
+  const player = ((ownProps.navigation.state?.params?.player: any): IPlayer);
 
   return {
+    ...(ownProps.navigation.state.params ? ownProps.navigation.state.params : {}),
     games: Array.from(state.games.games.values()).filter((game: IGame) =>
       isPartOfGame(player, game),
     ),

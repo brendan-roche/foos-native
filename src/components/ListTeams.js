@@ -6,6 +6,7 @@ import { Big } from 'big.js';
 import { DataProvider, LayoutProvider, RecyclerListView } from 'recyclerlistview';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import type { NavigationScreenProp, NavigationStateRoute } from 'react-navigation';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import type { RootStore } from '../reducers';
 import type { ITeam } from '../reducers/teamReducer';
@@ -180,6 +181,20 @@ class ListTeams extends Component<Props, State> {
 
   layoutProvider: LayoutProvider;
 
+  static navigationOptions = {
+    headerStyle: { height: 44, padding: 0 },
+    headerTitle: (
+      <AntDesign.Button
+        name="team"
+        backgroundColor="transparent"
+        underlayColor="transparent"
+        color="black"
+      >
+        <Text style={{ fontSize: 15 }}>Teams</Text>
+      </AntDesign.Button>
+    ),
+  };
+
   constructor(props: Props) {
     super(props);
 
@@ -231,7 +246,7 @@ class ListTeams extends Component<Props, State> {
 
   showTeam = (team: ITeam) => () => {
     const { navigation } = this.props;
-    navigation.navigate('NavToTeam', { team });
+    navigation.navigate('ShowTeam', { team });
   };
 
   rowRenderer = (type: number, team: ITeam) => (
@@ -311,13 +326,27 @@ class ListTeams extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: RootStore) => {
-  const { players } = state.players;
+const mapStateToProps = (state: RootStore, ownProps: Props): $Shape<Props> => {
+  let players;
+
+  if (ownProps.navigation.state.params) {
+    const { filter } = ownProps.navigation.state.params;
+    if (typeof filter === 'function') {
+      players = Array.from(state.players.players.values())
+        .filter(filter)
+        .map(player => [player.id, player]);
+    }
+  }
+
+  const playersMap = ((players ? new Map(players) : state.players.players): PlayersType);
+
   return {
+    ...(ownProps.navigation.state.params ? ownProps.navigation.state.params : {}),
     loading: state.teams.loading,
-    players: state.players.players,
+    players: playersMap,
     teams: Array.from(state.teams.teams.values()).filter(
-      (team: ITeam) => players.get(team.player1Id)?.active && players.get(team.player2Id)?.active,
+      (team: ITeam) =>
+        playersMap.get(team.player1Id)?.active && playersMap.get(team.player2Id)?.active,
     ),
   };
 };

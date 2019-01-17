@@ -161,7 +161,7 @@ class HomeScreen extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: RootStore) => ({
+const mapStateToProps = (state: RootStore): $Shape<Props> => ({
   players: state.players.players,
   teams: state.teams.teams,
   games: state.games.games,

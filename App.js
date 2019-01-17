@@ -14,13 +14,10 @@ import ListPlayers from './src/components/ListPlayers';
 import ListGames from './src/components/ListGames';
 import HomeScreen from './src/components/HomeScreen';
 import EditGame from './src/components/EditGame';
-import NavToGame from './src/components/NavToGame';
-import NewGame from './src/components/NewGame';
-import NavToPlayer from './src/components/NavToPlayer';
-import NavToGames from './src/components/NavToGames';
+import ShowGame from './src/components/ShowGame';
 import ListTeams from './src/components/ListTeams';
-import NavToTeams from './src/components/NavToTeams';
-import NavToTeam from './src/components/NavToTeam';
+import ShowTeam from './src/components/ShowTeam';
+import ShowPlayer from './src/components/ShowPlayer';
 
 // eslint-disable-next-line no-undef
 if (__DEV__) {
@@ -57,15 +54,16 @@ const AppNavigator = createStackNavigator(
     Games: ListGames,
     Teams: ListTeams,
     EditGame,
-    NewGame,
-    NavToPlayer,
-    NavToGame,
-    NavToGames,
-    NavToTeams,
-    NavToTeam,
+    ShowGame,
+    ShowPlayer,
+    ShowTeam,
   },
   {
     initialRouteName: 'Home',
+    defaultNavigationOptions: {
+      // headerMode: 'none',
+    },
+    // headerMode: 'none',
   },
 );
 

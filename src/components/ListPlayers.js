@@ -4,7 +4,7 @@ import { Dimensions, RefreshControl, StyleSheet, Text, TouchableOpacity, View } 
 import { connect } from 'react-redux';
 import { Big } from 'big.js';
 import { DataProvider, LayoutProvider, RecyclerListView } from 'recyclerlistview';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import type { NavigationScreenProp, NavigationStateRoute } from 'react-navigation';
 
 import type { RootStore } from '../reducers';
@@ -117,6 +117,19 @@ class ListPlayers extends Component<Props, State> {
 
   layoutProvider: LayoutProvider;
 
+  static navigationOptions = {
+    headerTitle: (
+      <FontAwesome.Button
+        name="users"
+        backgroundColor="transparent"
+        underlayColor="transparent" // This one
+        color="black"
+      >
+        <Text style={{ fontSize: 15 }}>Players</Text>
+      </FontAwesome.Button>
+    ),
+  };
+
   constructor(props: Props) {
     super(props);
 
@@ -165,7 +178,7 @@ class ListPlayers extends Component<Props, State> {
 
   showPlayer = (player: IPlayer) => () => {
     const { navigation } = this.props;
-    navigation.navigate('NavToPlayer', { player });
+    navigation.navigate('ShowPlayer', { player });
   };
 
   rowRenderer = (type: number, player: IPlayer) => (
@@ -190,7 +203,7 @@ class ListPlayers extends Component<Props, State> {
   render() {
     const { sortCol, sortAsc, dataProvider } = this.state;
     const { loading, getPlayers: getPlayersFn } = this.props;
-    const icon = <Icon name={sortAsc ? 'arrow-down' : 'arrow-up'} size={10} />;
+    const icon = <FontAwesome name={sortAsc ? 'arrow-down' : 'arrow-up'} size={10} />;
 
     return (
       <>
@@ -230,7 +243,8 @@ class ListPlayers extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: RootStore) => ({
+const mapStateToProps = (state: RootStore, ownProps: Props): $Shape<Props> => ({
+  ...(ownProps.navigation.state.params ? ownProps.navigation.state.params : {}),
   loading: state.players.loading,
   players: Array.from(state.players.players.values()).filter((player: IPlayer) => player.active),
 });

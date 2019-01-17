@@ -7,6 +7,7 @@ import { produce } from 'immer';
 import { NavigationActions } from 'react-navigation';
 import { Big } from 'big.js';
 import type { NavigationScreenProp, NavigationStateRoute } from 'react-navigation';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import type { PlayersType } from '../reducers/playerReducer';
 import { getPlayer } from '../reducers/playerReducer';
@@ -18,13 +19,15 @@ import { clearNewGame, createGame } from '../reducers/gameReducer';
 import VoiceToText from './VoiceToText';
 import TranscodeGame from '../helpers/TranscodeGame';
 
+type NumberHashType = { [key: number]: number };
+
 type Props = {
   createGame: (game: ICreateGame) => Promise<Object>,
   reloadPlayersAndTeams: (team1: GameTeamType, team2: GameTeamType) => Promise<Object>,
   loading: boolean,
   error: string | null,
   players: PlayersType,
-  playerTeams: number[][],
+  playerTeams: { [key: number]: NumberHashType },
   teams: TeamsType,
   newGame: IGame | null,
   team1DefenderId?: number,
@@ -112,53 +115,22 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state: RootStore) => {
-  // Given the two selected players we need to look up the team,
-  // so we store a hash of two player id mapped to their
-  // team id, so we can do an easy lookup
-  const playerTeams = {};
-  state.teams.teams.forEach((team, teamId) => {
-    if (!playerTeams[team.player1Id]) {
-      playerTeams[team.player1Id] = {};
-    }
-    playerTeams[team.player1Id][team.player2Id] = teamId;
-  });
-
-  return {
-    players: state.players.players,
-    teams: state.teams.teams,
-    playerTeams,
-    loading: state.players.loading || state.teams.loading || state.games.loading,
-    error: state.players.error || state.teams.loading || state.games.error,
-    newGame: state.games.newGameId ? state.games.games.get(state.games.newGameId) : null,
-  };
-};
-
-const mapDispatchToProps = dispatch => ({
-  createGame: (game: ICreateGame) => dispatch(createGame(game)),
-  reloadPlayersAndTeams: (team1: GameTeamType, team2: GameTeamType): Promise<Object> => {
-    const { defenderId: t1DefId, attackerId: t1AtkId } = team1;
-    const { defenderId: t2DefId, attackerId: t2AtkId } = team2;
-    if (t1AtkId && t1DefId && t2AtkId && t2DefId) {
-      return Promise.all([
-        dispatch(getTeam(team1.id)),
-        dispatch(getTeam(team2.id)),
-        dispatch(getPlayer(t1DefId)),
-        dispatch(getPlayer(t1AtkId)),
-        dispatch(getPlayer(t2DefId)),
-        dispatch(getPlayer(t2AtkId)),
-      ]).then(() => {
-        dispatch(clearNewGame());
-      });
-    }
-
-    return Promise.resolve();
-  },
-});
-
 class EditGame extends Component<Props, State> {
   // eslint-disable-next-line react/sort-comp
   voiceToText: VoiceToText | null;
+
+  static navigationOptions = {
+    headerTitle: (
+      <AntDesign.Button
+        name="team"
+        backgroundColor="transparent"
+        underlayColor="transparent"
+        color="black"
+      >
+        <Text style={{ fontSize: 15 }}>New Game</Text>
+      </AntDesign.Button>
+    ),
+  };
 
   static defaultProps = {
     team1DefenderId: undefined,
@@ -194,7 +166,7 @@ class EditGame extends Component<Props, State> {
 
     if (prevProps.newGame && !newGame) {
       const navAction = NavigationActions.navigate({
-        routeName: 'NavToGame',
+        routeName: 'ShowGame',
       });
       if (navigation.reset) {
         navigation.reset([navAction], 0);
@@ -399,6 +371,51 @@ class EditGame extends Component<Props, State> {
     );
   }
 }
+
+const mapDispatchToProps = dispatch => ({
+  createGame: (game: ICreateGame) => dispatch(createGame(game)),
+  reloadPlayersAndTeams: (team1: GameTeamType, team2: GameTeamType): Promise<Object> => {
+    const { defenderId: t1DefId, attackerId: t1AtkId } = team1;
+    const { defenderId: t2DefId, attackerId: t2AtkId } = team2;
+    if (t1AtkId && t1DefId && t2AtkId && t2DefId) {
+      return Promise.all([
+        dispatch(getTeam(team1.id)),
+        dispatch(getTeam(team2.id)),
+        dispatch(getPlayer(t1DefId)),
+        dispatch(getPlayer(t1AtkId)),
+        dispatch(getPlayer(t2DefId)),
+        dispatch(getPlayer(t2AtkId)),
+      ]).then(() => {
+        dispatch(clearNewGame());
+      });
+    }
+
+    return Promise.resolve();
+  },
+});
+
+const mapStateToProps = (state: RootStore, ownProps: Props): $Shape<Props> => {
+  // Given the two selected players we need to look up the team,
+  // so we store a hash of two player id mapped to their
+  // team id, so we can do an easy lookup
+  const playerTeams = {};
+  state.teams.teams.forEach((team, teamId) => {
+    if (!playerTeams[team.player1Id]) {
+      playerTeams[team.player1Id] = {};
+    }
+    playerTeams[team.player1Id][team.player2Id] = teamId;
+  });
+
+  return {
+    ...(ownProps.navigation.state.params ? ownProps.navigation.state.params : {}),
+    players: state.players.players,
+    teams: state.teams.teams,
+    playerTeams,
+    loading: state.players.loading || state.teams.loading || state.games.loading,
+    error: state.players.error || state.teams.error || state.games.error,
+    newGame: state.games.newGameId ? state.games.games.get(state.games.newGameId) : null,
+  };
+};
 
 export default connect(
   mapStateToProps,

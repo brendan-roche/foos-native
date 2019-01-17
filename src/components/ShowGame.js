@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import { Big } from 'big.js';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import type { NavigationScreenProp, NavigationStateRoute } from 'react-navigation';
 
 import { Col, Row, Rows, Table, TableWrapper } from 'react-native-table-component';
@@ -59,6 +60,19 @@ const styles = StyleSheet.create({
 });
 
 class ShowGame extends Component<Props> {
+  static navigationOptions = {
+    headerTitle: (
+      <FontAwesome.Button
+        name="soccer-ball-o"
+        backgroundColor="transparent"
+        underlayColor="transparent"
+        color="black"
+      >
+        <Text style={{ fontSize: 15 }}>Game</Text>
+      </FontAwesome.Button>
+    ),
+  };
+
   findHeadToHead = (): IGame[] => {
     const { game, games } = this.props;
     const { team1, team2 } = game;
@@ -169,7 +183,7 @@ class ShowGame extends Component<Props> {
           style={styles.button}
           title="Teams New Game"
           onPress={() =>
-            navigation.navigate('NewGame', {
+            navigation.navigate('EditGame', {
               team1DefenderId: team1.defenderId,
               team1AttackerId: team1.attackerId,
               team2DefenderId: team2.defenderId,
@@ -181,7 +195,7 @@ class ShowGame extends Component<Props> {
           style={styles.button}
           title="Team 1 New Game"
           onPress={() =>
-            navigation.navigate('NewGame', {
+            navigation.navigate('EditGame', {
               team1DefenderId: team1.defenderId,
               team1AttackerId: team1.attackerId,
             })
@@ -191,7 +205,7 @@ class ShowGame extends Component<Props> {
           style={styles.button}
           title="Team 2 New Game"
           onPress={() =>
-            navigation.navigate('NewGame', {
+            navigation.navigate('EditGame', {
               team2DefenderId: team2.defenderId,
               team2AttackerId: team2.attackerId,
             })
@@ -205,9 +219,11 @@ class ShowGame extends Component<Props> {
 // Given the two selected players we need to look up the team,
 // so we store a hash of two player id mapped to their
 // team id, so we can do an easy lookup
-const mapStateToProps = (state: RootStore) => ({
+const mapStateToProps = (state: RootStore, ownProps: Props): $Shape<Props> => ({
+  ...(ownProps.navigation.state.params ? ownProps.navigation.state.params : {}),
   players: state.players.players,
   teams: state.teams.teams,
   games: state.games.games,
 });
+
 export default connect(mapStateToProps)(ShowGame);

@@ -4,17 +4,18 @@ import { Button, StyleSheet, Text, View } from 'react-native';
 import { connect } from 'react-redux';
 import { Big } from 'big.js';
 import { NavigationActions } from 'react-navigation';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import type { NavigationScreenProp, NavigationStateRoute } from 'react-navigation';
 
 import { Col, Rows, Table, TableWrapper } from 'react-native-table-component';
 import type { RootStore } from '../reducers';
 import type { ITeam } from '../reducers/teamReducer';
-import type { GamesType, IGame } from '../reducers/gameReducer';
+import type { IGame } from '../reducers/gameReducer';
 import type { PlayersType } from '../reducers/playerReducer';
 
 type Props = {
   team: ITeam,
-  games: GamesType,
+  games: IGame[],
   players: PlayersType,
   navigation: NavigationScreenProp<NavigationStateRoute>,
 };
@@ -60,16 +61,20 @@ function isPartOfGame(team: ITeam, game: IGame): boolean {
   return team.id === game.team1.id || team.id === game.team2.id;
 }
 
-const mapStateToProps = (state: RootStore, ownProps: Props) => {
-  const { team } = ownProps;
-
-  return {
-    games: Array.from(state.games.games.values()).filter((game: IGame) => isPartOfGame(team, game)),
-    players: state.players.players,
-  };
-};
-
 class ShowTeam extends Component<Props> {
+  static navigationOptions = {
+    headerTitle: (
+      <AntDesign.Button
+        name="team"
+        backgroundColor="transparent"
+        underlayColor="transparent"
+        color="black"
+      >
+        <Text style={{ fontSize: 15 }}>Team</Text>
+      </AntDesign.Button>
+    ),
+  };
+
   goHome = () => {
     const { navigation } = this.props;
     const navAction = NavigationActions.navigate({
@@ -82,7 +87,7 @@ class ShowTeam extends Component<Props> {
 
   showGames = () => {
     const { team, navigation } = this.props;
-    navigation.navigate('NavToGames', { filter: (game: IGame) => isPartOfGame(team, game) });
+    navigation.navigate('Games', { filter: (game: IGame) => isPartOfGame(team, game) });
   };
 
   render() {
@@ -170,5 +175,15 @@ class ShowTeam extends Component<Props> {
     );
   }
 }
+
+const mapStateToProps = (state: RootStore, ownProps: Props): $Shape<Props> => {
+  const team = ((ownProps.navigation.state?.params?.team: any): ITeam);
+
+  return {
+    ...(ownProps.navigation.state.params ? ownProps.navigation.state.params : {}),
+    games: Array.from(state.games.games.values()).filter((game: IGame) => isPartOfGame(team, game)),
+    players: state.players.players,
+  };
+};
 
 export default connect(mapStateToProps)(ShowTeam);
