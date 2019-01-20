@@ -107,6 +107,12 @@ const styles = StyleSheet.create({
     flex: 0,
     flexBasis: 50,
     height: 50,
+    marginBottom: 20,
+  },
+  saveAndAddNewButton: {
+    flex: 0,
+    flexBasis: 50,
+    height: 50,
   },
   speechToText: {
     flex: 0,
@@ -118,6 +124,9 @@ const styles = StyleSheet.create({
 class EditGame extends Component<Props, State> {
   // eslint-disable-next-line react/sort-comp
   voiceToText: VoiceToText | null;
+
+  // eslint-disable-next-line react/sort-comp
+  addNew = false;
 
   static navigationOptions = {
     headerTitle: (
@@ -165,11 +174,15 @@ class EditGame extends Component<Props, State> {
     }
 
     if (prevProps.newGame && !newGame) {
-      const navAction = NavigationActions.navigate({
-        routeName: 'ShowGame',
-      });
-      if (navigation.reset) {
-        navigation.reset([navAction], 0);
+      if (this.addNew) {
+        this.addNew = false;
+      } else {
+        const navAction = NavigationActions.navigate({
+          routeName: 'ShowGame',
+        });
+        if (navigation.reset) {
+          navigation.reset([navAction], 0);
+        }
       }
     }
   }
@@ -235,6 +248,11 @@ class EditGame extends Component<Props, State> {
     const { createGame: createGameFn } = this.props;
     const { team1, team2 } = this.state;
     createGameFn({ team1, team2 });
+  };
+
+  saveAndAddNew = () => {
+    this.addNew = true;
+    this.saveGame();
   };
 
   isValidGame = () => {
@@ -364,6 +382,12 @@ class EditGame extends Component<Props, State> {
         <Button
           style={styles.saveButton}
           title="Save Game"
+          disabled={!this.isValidGame()}
+          onPress={this.saveGame}
+        />
+        <Button
+          style={styles.saveAndAddNewButton}
+          title="Save & Add New"
           disabled={!this.isValidGame()}
           onPress={this.saveGame}
         />
