@@ -165,10 +165,11 @@ class ShowPlayer extends Component<Props> {
             <Rows data={data} flexArr={[1]} style={styles.row} textStyle={styles.text} />
           </TableWrapper>
         </Table>
+        <View style={styles.button}>
+          <Button title="Show Games" onPress={this.showGames} />
+        </View>
 
-        <Button style={styles.button} title="Show Games" onPress={this.showGames} />
-
-        <Button style={styles.button} title="Home" onPress={this.goHome} />
+        <Button title="Home" onPress={this.goHome} />
       </View>
     );
   }

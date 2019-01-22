@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
   },
   button: {
-    // alignContent: 'right'
+    marginBottom: 10,
   },
 });
 
@@ -171,10 +171,10 @@ class ShowTeam extends Component<Props> {
             <Rows data={data} flexArr={[1]} style={styles.row} textStyle={styles.text} />
           </TableWrapper>
         </Table>
-
-        <Button style={styles.button} title="Show Games" onPress={this.showGames} />
-
-        <Button style={styles.button} title="Home" onPress={this.goHome} />
+        <View style={styles.button}>
+          <Button title="Show Games" onPress={this.showGames} />
+        </View>
+        <Button title="Home" onPress={this.goHome} />
       </View>
     );
   }

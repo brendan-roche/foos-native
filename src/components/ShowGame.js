@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
   },
   button: {
-    // alignContent: 'right'
+    marginBottom: 10,
   },
 });
 
@@ -169,32 +169,34 @@ class ShowGame extends Component<Props> {
             <Rows data={data} flexArr={[1, 1]} style={styles.row} textStyle={styles.text} />
           </TableWrapper>
         </Table>
-
-        <Button style={styles.button} title="Home" onPress={() => navigation.navigate('Home')} />
+        <View style={styles.button}>
+          <Button title="Home" onPress={() => navigation.navigate('Home')} />
+        </View>
+        <View style={styles.button}>
+          <Button
+            title="Teams New Game"
+            onPress={() =>
+              navigation.navigate('EditGame', {
+                team1DefenderId: team1.defenderId,
+                team1AttackerId: team1.attackerId,
+                team2DefenderId: team2.defenderId,
+                team2AttackerId: team2.attackerId,
+              })
+            }
+          />
+        </View>
+        <View style={styles.button}>
+          <Button
+            title="Team 1 New Game"
+            onPress={() =>
+              navigation.navigate('EditGame', {
+                team1DefenderId: team1.defenderId,
+                team1AttackerId: team1.attackerId,
+              })
+            }
+          />
+        </View>
         <Button
-          style={styles.button}
-          title="Teams New Game"
-          onPress={() =>
-            navigation.navigate('EditGame', {
-              team1DefenderId: team1.defenderId,
-              team1AttackerId: team1.attackerId,
-              team2DefenderId: team2.defenderId,
-              team2AttackerId: team2.attackerId,
-            })
-          }
-        />
-        <Button
-          style={styles.button}
-          title="Team 1 New Game"
-          onPress={() =>
-            navigation.navigate('EditGame', {
-              team1DefenderId: team1.defenderId,
-              team1AttackerId: team1.attackerId,
-            })
-          }
-        />
-        <Button
-          style={styles.button}
           title="Team 2 New Game"
           onPress={() =>
             navigation.navigate('EditGame', {

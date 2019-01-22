@@ -104,15 +104,7 @@ const styles = StyleSheet.create({
     // alignContent: 'right'
   },
   saveButton: {
-    flex: 0,
-    flexBasis: 50,
-    height: 50,
-    marginBottom: 20,
-  },
-  saveAndAddNewButton: {
-    flex: 0,
-    flexBasis: 50,
-    height: 50,
+    marginBottom: 10,
   },
   speechToText: {
     flex: 0,
@@ -375,18 +367,10 @@ class EditGame extends Component<Props, State> {
           this.updateTeam(this.updateTeamAttacker, 'team2'),
           this.updateTeam(this.updateTeamScore, 'team2'),
         )}
-        <Button
-          style={styles.saveButton}
-          title="Save Game"
-          disabled={!this.isValidGame()}
-          onPress={this.saveGame}
-        />
-        <Button
-          style={styles.saveAndAddNewButton}
-          title="Save & Add New"
-          disabled={!this.isValidGame()}
-          onPress={this.saveGame}
-        />
+        <View style={styles.saveButton}>
+          <Button title="Save Game" disabled={!this.isValidGame()} onPress={this.saveGame} />
+        </View>
+        <Button title="Save & Add New" disabled={!this.isValidGame()} onPress={this.saveGame} />
       </View>
     );
   }
