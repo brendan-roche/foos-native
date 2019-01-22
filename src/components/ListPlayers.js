@@ -5,11 +5,16 @@ import { connect } from 'react-redux';
 import { Big } from 'big.js';
 import { DataProvider, LayoutProvider, RecyclerListView } from 'recyclerlistview';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import type { NavigationScreenProp, NavigationStateRoute } from 'react-navigation';
+import type {
+  NavigationScreenProp,
+  NavigationStateRoute,
+  NavigationStackScreenOptions,
+} from 'react-navigation';
 
 import type { RootStore } from '../reducers';
 import type { IPlayer } from '../reducers/playerReducer';
 import { getPlayers } from '../reducers/playerReducer';
+import AppHeader from './AppHeader';
 
 type Props = {
   players: IPlayer[],
@@ -117,17 +122,8 @@ class ListPlayers extends Component<Props, State> {
 
   layoutProvider: LayoutProvider;
 
-  static navigationOptions = {
-    headerTitle: (
-      <FontAwesome.Button
-        name="users"
-        backgroundColor="transparent"
-        underlayColor="transparent" // This one
-        color="black"
-      >
-        <Text style={{ fontSize: 15 }}>Players</Text>
-      </FontAwesome.Button>
-    ),
+  static navigationOptions: NavigationStackScreenOptions = {
+    headerTitle: <AppHeader title="Players" icon="users" iconFamily="FontAwesome" />,
   };
 
   constructor(props: Props) {

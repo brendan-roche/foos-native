@@ -1,17 +1,21 @@
 // @flow
 import React, { Component } from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Button, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import { Big } from 'big.js';
 import { NavigationActions } from 'react-navigation';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import type { NavigationScreenProp, NavigationStateRoute } from 'react-navigation';
+import type {
+  NavigationScreenProp,
+  NavigationStateRoute,
+  NavigationStackScreenOptions,
+} from 'react-navigation';
 
 import { Col, Rows, Table, TableWrapper } from 'react-native-table-component';
 import type { RootStore } from '../reducers';
 import type { ITeam } from '../reducers/teamReducer';
 import type { IGame } from '../reducers/gameReducer';
 import type { PlayersType } from '../reducers/playerReducer';
+import AppHeader from './AppHeader';
 
 type Props = {
   team: ITeam,
@@ -28,10 +32,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     flexDirection: 'column',
     margin: 20,
-  },
-  pageHeader: {
-    fontSize: 16,
-    fontWeight: 'bold',
   },
   head: {
     height: 40,
@@ -62,17 +62,31 @@ function isPartOfGame(team: ITeam, game: IGame): boolean {
 }
 
 class ShowTeam extends Component<Props> {
-  static navigationOptions = {
-    headerTitle: (
-      <AntDesign.Button
-        name="team"
-        backgroundColor="transparent"
-        underlayColor="transparent"
-        color="black"
-      >
-        <Text style={{ fontSize: 15 }}>Team</Text>
-      </AntDesign.Button>
-    ),
+  static navigationOptions: NavigationStackScreenOptions = ({ navigation }) => {
+    const { title } = navigation.state.params;
+    return {
+      headerTitle: <AppHeader title={title || ''} icon="team" iconFamily="AntDesign" />,
+    };
+  };
+
+  componentDidMount() {
+    const { navigation } = this.props;
+    const [p1Name, p2Name] = this.getPlayerNames();
+
+    navigation.setParams({ title: `${p1Name} & ${p2Name}` });
+  }
+
+  getPlayerNames(): [string, string] {
+    const { team, players } = this.props;
+    const p1 = players.get(team.player1Id);
+    const p2 = players.get(team.player2Id);
+
+    return [(p1 && p1.name) || '', (p2 && p2.name) || ''];
+  }
+
+  showGames = () => {
+    const { team, navigation } = this.props;
+    navigation.navigate('Games', { filter: (game: IGame) => isPartOfGame(team, game) });
   };
 
   goHome = () => {
@@ -85,13 +99,8 @@ class ShowTeam extends Component<Props> {
     }
   };
 
-  showGames = () => {
-    const { team, navigation } = this.props;
-    navigation.navigate('Games', { filter: (game: IGame) => isPartOfGame(team, game) });
-  };
-
   render() {
-    const { team, games, players } = this.props;
+    const { team, games } = this.props;
 
     let donuts = 0;
     let winStreak = 0;
@@ -123,10 +132,7 @@ class ShowTeam extends Component<Props> {
         }
       }
     });
-    const p1 = players.get(team.player1Id);
-    const p2 = players.get(team.player2Id);
-    const p1Name = (p1 && p1.name) || '';
-    const p2Name = (p2 && p2.name) || '';
+    const [p1Name, p2Name] = this.getPlayerNames();
     const data = [
       [p1Name],
       [p2Name],
@@ -142,8 +148,6 @@ class ShowTeam extends Component<Props> {
     ];
     return (
       <View style={styles.container}>
-        <Text style={styles.pageHeader}>{`${p1Name} & ${p2Name}`}</Text>
-
         <Table>
           <TableWrapper style={styles.wrapper}>
             <Col

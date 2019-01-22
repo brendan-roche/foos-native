@@ -1,10 +1,13 @@
 // @flow
 import React, { Component } from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Button, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import { Big } from 'big.js';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import type { NavigationScreenProp, NavigationStateRoute } from 'react-navigation';
+import type {
+  NavigationScreenProp,
+  NavigationStateRoute,
+  NavigationStackScreenOptions,
+} from 'react-navigation';
 
 import { Col, Rows, Table, TableWrapper } from 'react-native-table-component';
 import { NavigationActions } from 'react-navigation';
@@ -12,6 +15,7 @@ import type { RootStore } from '../reducers';
 import type { IPlayer, PlayersType } from '../reducers/playerReducer';
 import type { ITeam } from '../reducers/teamReducer';
 import type { GameTeamType, IGame } from '../reducers/gameReducer';
+import AppHeader from './AppHeader';
 
 type Props = {
   player: IPlayer,
@@ -31,10 +35,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     flexDirection: 'column',
     margin: 20,
-  },
-  pageHeader: {
-    fontSize: 16,
-    fontWeight: 'bold',
   },
   head: {
     height: 40,
@@ -73,18 +73,15 @@ function isPartOfTeam(player: IPlayer, team: ITeam): boolean {
 }
 
 class ShowPlayer extends Component<Props> {
-  static navigationOptions = {
+  static navigationOptions: NavigationStackScreenOptions = ({ navigation }) => ({
     headerTitle: (
-      <FontAwesome.Button
-        name="users"
-        backgroundColor="transparent"
-        underlayColor="transparent"
-        color="black"
-      >
-        <Text style={{ fontSize: 15 }}>Player</Text>
-      </FontAwesome.Button>
+      <AppHeader
+        title={navigation.state.params.player.name}
+        icon="users"
+        iconFamily="FontAwesome"
+      />
     ),
-  };
+  });
 
   goHome = () => {
     const { navigation } = this.props;
@@ -147,8 +144,6 @@ class ShowPlayer extends Component<Props> {
     ];
     return (
       <View style={styles.container}>
-        <Text style={styles.pageHeader}>{player.name}</Text>
-
         <Table>
           <TableWrapper style={styles.wrapper}>
             <Col

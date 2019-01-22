@@ -1,7 +1,11 @@
 // @flow
 import React, { Component } from 'react';
 import { findNodeHandle, Image, StyleSheet, Text, View } from 'react-native';
-import type { NavigationScreenProp, NavigationStateRoute } from 'react-navigation';
+import type {
+  NavigationScreenProp,
+  NavigationStateRoute,
+  NavigationStackScreenOptions,
+} from 'react-navigation';
 import { BlurView } from 'react-native-blur';
 import Spinner from 'react-native-loading-spinner-overlay';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -51,6 +55,10 @@ const styles = StyleSheet.create({
 });
 
 class HomeScreen extends Component<Props, State> {
+  static navigationOptions: NavigationStackScreenOptions = {
+    header: null,
+  };
+
   // eslint-disable-next-line react/sort-comp
   backgroundImage: ?Image;
 

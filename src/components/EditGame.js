@@ -6,8 +6,11 @@ import { connect } from 'react-redux';
 import { produce } from 'immer';
 import { NavigationActions } from 'react-navigation';
 import { Big } from 'big.js';
-import type { NavigationScreenProp, NavigationStateRoute } from 'react-navigation';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import type {
+  NavigationScreenProp,
+  NavigationStateRoute,
+  NavigationStackScreenOptions,
+} from 'react-navigation';
 
 import type { PlayersType } from '../reducers/playerReducer';
 import { getPlayer } from '../reducers/playerReducer';
@@ -18,6 +21,7 @@ import type { CreateGameTeamType, GameTeamType, ICreateGame, IGame } from '../re
 import { clearNewGame, createGame } from '../reducers/gameReducer';
 import VoiceToText from './VoiceToText';
 import TranscodeGame from '../helpers/TranscodeGame';
+import AppHeader from './AppHeader';
 
 type NumberHashType = { [key: number]: number };
 
@@ -47,10 +51,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     margin: 20,
-  },
-  pageHeader: {
-    fontSize: 16,
-    fontWeight: 'bold',
   },
   teamContainer: {
     flex: 1,
@@ -128,18 +128,15 @@ class EditGame extends Component<Props, State> {
   // eslint-disable-next-line react/sort-comp
   addNew = false;
 
-  static navigationOptions = {
+  static navigationOptions: NavigationStackScreenOptions = ({ navigation }) => ({
     headerTitle: (
-      <AntDesign.Button
-        name="team"
-        backgroundColor="transparent"
-        underlayColor="transparent"
-        color="black"
-      >
-        <Text style={{ fontSize: 15 }}>New Game</Text>
-      </AntDesign.Button>
+      <AppHeader
+        title={`${navigation.state.params?.game ? 'Edit' : 'New'} Game`}
+        icon="team"
+        iconFamily="AntDesign"
+      />
     ),
-  };
+  });
 
   static defaultProps = {
     team1DefenderId: undefined,
@@ -364,7 +361,6 @@ class EditGame extends Component<Props, State> {
           onToggleListening={this.onToggleListening}
           style={styles.speechToText}
         />
-        <Text style={styles.pageHeader}>New Game</Text>
         {this.renderTeam(
           team1,
           'Team 1',

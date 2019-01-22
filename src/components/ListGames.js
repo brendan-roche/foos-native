@@ -4,13 +4,17 @@ import React, { Component } from 'react';
 import { Dimensions, RefreshControl, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 import { DataProvider, LayoutProvider, RecyclerListView } from 'recyclerlistview';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import type { NavigationScreenProp, NavigationStateRoute } from 'react-navigation';
+import type {
+  NavigationScreenProp,
+  NavigationStateRoute,
+  NavigationStackScreenOptions,
+} from 'react-navigation';
 
 import type { RootStore } from '../reducers';
 import type { IGame } from '../reducers/gameReducer';
 import { getGames } from '../reducers/gameReducer';
 import type { PlayersType } from '../reducers/playerReducer';
+import AppHeader from './AppHeader';
 
 type Props = {
   players: PlayersType,
@@ -88,17 +92,8 @@ class ListGames extends Component<Props, State> {
 
   layoutProvider: LayoutProvider;
 
-  static navigationOptions = {
-    headerTitle: (
-      <FontAwesome.Button
-        name="soccer-ball-o"
-        backgroundColor="transparent"
-        underlayColor="transparent"
-        color="black"
-      >
-        <Text style={{ fontSize: 15 }}>Games</Text>
-      </FontAwesome.Button>
-    ),
+  static navigationOptions: NavigationStackScreenOptions = {
+    headerTitle: <AppHeader title="Games" icon="soccer-ball-o" iconFamily="FontAwesome" />,
   };
 
   static defaultProps = {

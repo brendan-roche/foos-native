@@ -5,13 +5,17 @@ import { connect } from 'react-redux';
 import { Big } from 'big.js';
 import { DataProvider, LayoutProvider, RecyclerListView } from 'recyclerlistview';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import type { NavigationScreenProp, NavigationStateRoute } from 'react-navigation';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import type {
+  NavigationScreenProp,
+  NavigationStateRoute,
+  NavigationStackScreenOptions,
+} from 'react-navigation';
 
 import type { RootStore } from '../reducers';
 import type { ITeam } from '../reducers/teamReducer';
 import { getTeams } from '../reducers/teamReducer';
 import type { IPlayer, PlayersType } from '../reducers/playerReducer';
+import AppHeader from './AppHeader';
 
 type Props = {
   players: PlayersType,
@@ -181,18 +185,9 @@ class ListTeams extends Component<Props, State> {
 
   layoutProvider: LayoutProvider;
 
-  static navigationOptions = {
-    headerStyle: { height: 44, padding: 0 },
-    headerTitle: (
-      <AntDesign.Button
-        name="team"
-        backgroundColor="transparent"
-        underlayColor="transparent"
-        color="black"
-      >
-        <Text style={{ fontSize: 15 }}>Teams</Text>
-      </AntDesign.Button>
-    ),
+  static navigationOptions: NavigationStackScreenOptions = {
+    // headerStyle: { height: 44, paddingTop: 0 },
+    headerTitle: <AppHeader title="Teams" icon="team" iconFamily="AntDesign" />,
   };
 
   constructor(props: Props) {

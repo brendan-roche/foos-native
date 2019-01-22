@@ -1,16 +1,20 @@
 // @flow
 import React, { Component } from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Button, StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import { Big } from 'big.js';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import type { NavigationScreenProp, NavigationStateRoute } from 'react-navigation';
+import type {
+  NavigationScreenProp,
+  NavigationStateRoute,
+  NavigationStackScreenOptions,
+} from 'react-navigation';
 
 import { Col, Row, Rows, Table, TableWrapper } from 'react-native-table-component';
 import type { RootStore } from '../reducers';
 import type { GamesType, GameTeamType, IGame } from '../reducers/gameReducer';
 import type { TeamsType } from '../reducers/teamReducer';
 import type { PlayersType } from '../reducers/playerReducer';
+import AppHeader from './AppHeader';
 
 type Props = {
   game: IGame,
@@ -30,10 +34,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     flexDirection: 'column',
     margin: 20,
-  },
-  pageHeader: {
-    fontSize: 16,
-    fontWeight: 'bold',
   },
   head: {
     height: 40,
@@ -60,18 +60,15 @@ const styles = StyleSheet.create({
 });
 
 class ShowGame extends Component<Props> {
-  static navigationOptions = {
+  static navigationOptions: NavigationStackScreenOptions = ({ navigation }) => ({
     headerTitle: (
-      <FontAwesome.Button
-        name="soccer-ball-o"
-        backgroundColor="transparent"
-        underlayColor="transparent"
-        color="black"
-      >
-        <Text style={{ fontSize: 15 }}>Game</Text>
-      </FontAwesome.Button>
+      <AppHeader
+        title={`Game ${navigation.state.params.game.id}`}
+        icon="soccer-ball-o"
+        iconFamily="FontAwesome"
+      />
     ),
-  };
+  });
 
   findHeadToHead = (): IGame[] => {
     const { game, games } = this.props;
@@ -143,11 +140,6 @@ class ShowGame extends Component<Props> {
     );
     return (
       <View style={styles.container}>
-        <Text style={styles.pageHeader}>
-          Game
-          {game.id}
-        </Text>
-
         <Table>
           <Row
             data={['', 'Team 1', 'Team 2']}
