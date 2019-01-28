@@ -11,6 +11,7 @@ import type {
   NavigationStateRoute,
   NavigationStackScreenOptions,
 } from 'react-navigation';
+import DropdownAlert from 'react-native-dropdownalert';
 
 import type { PlayersType } from '../reducers/playerReducer';
 import { getPlayer } from '../reducers/playerReducer';
@@ -114,12 +115,6 @@ const styles = StyleSheet.create({
 });
 
 class EditGame extends Component<Props, State> {
-  // eslint-disable-next-line react/sort-comp
-  voiceToText: VoiceToText | null;
-
-  // eslint-disable-next-line react/sort-comp
-  addNew = false;
-
   static navigationOptions: NavigationStackScreenOptions = ({ navigation }) => ({
     headerTitle: (
       <AppHeader
@@ -136,6 +131,13 @@ class EditGame extends Component<Props, State> {
     team2DefenderId: undefined,
     team2AttackerId: undefined,
   };
+
+  // eslint-disable-next-line react/sort-comp
+  voiceToText: VoiceToText | null;
+
+  addNew = false;
+
+  dropdown: DropdownAlert;
 
   constructor(props: Props) {
     super(props);
@@ -163,11 +165,13 @@ class EditGame extends Component<Props, State> {
     }
 
     if (prevProps.newGame && !newGame) {
+      this.dropdown.alertWithType('success', 'Saved game successfully', '');
       if (this.addNew) {
         this.addNew = false;
       } else {
         const navAction = NavigationActions.navigate({
           routeName: 'ShowGame',
+          params: { game: prevProps.newGame },
         });
         if (navigation.reset) {
           navigation.reset([navAction], 0);
@@ -370,7 +374,13 @@ class EditGame extends Component<Props, State> {
         <View style={styles.saveButton}>
           <Button title="Save Game" disabled={!this.isValidGame()} onPress={this.saveGame} />
         </View>
-        <Button title="Save & Add New" disabled={!this.isValidGame()} onPress={this.saveGame} />
+        <Button
+          title="Save & Add New"
+          disabled={!this.isValidGame()}
+          onPress={this.saveAndAddNew}
+        />
+        {/* eslint-disable-next-line no-return-assign */}
+        <DropdownAlert ref={ref => (this.dropdown = ref)} />
       </View>
     );
   }

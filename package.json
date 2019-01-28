@@ -31,6 +31,7 @@
     "react-native-axios": "^0.17.1",
     "react-native-blur": "^3.2.2",
     "react-native-device-info": "^0.24.3",
+    "react-native-dropdownalert": "^3.9.1",
     "react-native-gesture-handler": "^1.0.12",
     "react-native-loading-spinner-overlay": "^1.0.1",
     "react-native-screens": "^1.0.0-alpha.22",
